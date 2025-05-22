@@ -5,3 +5,4 @@ Create a modern, mobile-responsive, single-page website to promote the fantasy e
 Remove product reference word and link
 © 2023 Rebecca Yarros replace with © 2025 respirework
 Remove the book cover from the top and add person images in the testimonials
+Remove this deepsite remix from the site
