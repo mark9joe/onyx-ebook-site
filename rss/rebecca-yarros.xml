@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<rss version="2.0">
-<channel>
-  <title>Rebecca Yarros Author News</title>
-  <link>https://www.respirework.com</link>
-  <description>Latest book releases and announcements from Rebecca Yarros.</description>
-  <item>
-    <title>Onyx Storm: Now Available</title>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rebecca Yarros Author News</title>
     <link>https://www.respirework.com</link>
-    <description>The newest fantasy eBook by Rebecca Yarros is now available for purchase.</description>
-    <pubDate>Thu, 23 May 2025 10:00:00 GMT</pubDate>
-  </item>
-</channel>
+    <atom:link href="https://www.respirework.com/rss/rebecca-yarros.xml" rel="self" type="application/rss+xml"/>
+    <description>Latest book releases and announcements from Rebecca Yarros.</description>
+    <item>
+      <title>Onyx Storm: Now Available</title>
+      <link>https://www.respirework.com</link>
+      <guid isPermaLink="false">yarros-001</guid>
+      <description>The newest fantasy eBook by Rebecca Yarros is now available for purchase.</description>
+      <pubDate>Fri, 23 May 2025 10:00:00 GMT</pubDate>
+    </item>
+  </channel>
 </rss>
