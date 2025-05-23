@@ -1,0 +1,33 @@
+name: Update Rebecca Yarros RSS Feed
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install rss-parser
+        run: npm install rss-parser
+
+      - name: Run Rebecca feed merger
+        run: node scripts/merge-rebecca.js
+
+      - name: Commit and push
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git add docs/rss/rebecca-yarros.xml
+          git commit -m "Auto-update Rebecca Yarros RSS feed"
+          git push
