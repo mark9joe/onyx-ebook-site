@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+  <head>
+    <title>RespireWork RSS Feeds</title>
+  </head>
+  <body>
+    <outline text="RespireWork Feeds" title="RespireWork Feeds">
+      <outline text="Master Feed" title="Master Feed" type="rss" xmlUrl="https://www.respirework.com/rss.xml" htmlUrl="https://www.respirework.com/rss.html"/>
+      <outline text="Empyrean Series Feed" title="Empyrean Series Feed" type="rss" xmlUrl="https://www.respirework.com/rss/empyrean-series.xml" htmlUrl="https://www.respirework.com/rss/empyrean-series.xml"/>
+      <outline text="Rebecca Yarros Feed" title="Rebecca Yarros Feed" type="rss" xmlUrl="https://www.respirework.com/rss/rebecca-yarros.xml" htmlUrl="https://www.respirework.com/rss/rebecca-yarros.xml"/>
+      <outline text="Combined Feed" title="Combined Feed" type="rss" xmlUrl="https://www.respirework.com/feeds.xml" htmlUrl="https://www.respirework.com/feeds.xml"/>
+    </outline>
+  </body>
+</opml>
