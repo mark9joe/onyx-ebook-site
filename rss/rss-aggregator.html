@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Fantasy Feed Aggregator - Respirework</title>
+  <title>Respirework RSS Aggregator</title>
   <style>
-    body { font-family: sans-serif; padding: 2em; background: #f4f4f4; }
+    body { font-family: sans-serif; background: #f9f9f9; padding: 2em; }
     h1 { color: #333; }
     .feed-item {
       background: white;
@@ -14,7 +14,7 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
     .feed-item h3 {
-      margin: 0 0 0.5em 0;
+      margin-top: 0;
       color: #2c3e50;
     }
     .feed-item a {
@@ -25,8 +25,8 @@
       text-decoration: underline;
     }
     .cta {
-      margin-top: 1em;
       display: inline-block;
+      margin-top: 1em;
       background: #28a745;
       color: white;
       padding: 0.6em 1.2em;
@@ -40,39 +40,44 @@
   </style>
 </head>
 <body>
-  <h1>Live Fantasy Feed Aggregator</h1>
-  <div id="feed-container">Loading feed...</div>
+  <h1>Live Feed: Respirework RSS Aggregator</h1>
+  <div id="feed-container">Loading updates...</div>
 
   <script>
-    async function loadFeeds() {
-      const response = await fetch("rss-aggregator.php");
-      const text = await response.text();
-      const parser = new DOMParser();
-      const xml = parser.parseFromString(text, "application/xml");
-      const items = xml.querySelectorAll("item");
+    async function loadFeed() {
+      try {
+        const response = await fetch("rss-aggregator.xml");
+        const text = await response.text();
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(text, "application/xml");
+        const items = xml.querySelectorAll("item");
 
-      let html = "";
-      items.forEach(item => {
-        const title = item.querySelector("title").textContent;
-        const link = item.querySelector("link").textContent;
-        const description = item.querySelector("description").textContent;
-        const pubDate = item.querySelector("pubDate").textContent;
+        let html = "";
+        items.forEach(item => {
+          const title = item.querySelector("title")?.textContent || "Untitled";
+          const link = item.querySelector("link")?.textContent || "#";
+          const description = item.querySelector("description")?.textContent || "";
+          const pubDate = item.querySelector("pubDate")?.textContent || "";
 
-        html += `
-          <div class="feed-item">
-            <h3>${title}</h3>
-            <p><strong>Date:</strong> ${pubDate}</p>
-            <p>${description}</p>
-            <p><a href="${link}" target="_blank">Read Original Post</a></p>
-            <a href="https://respirework.com/buy-now" class="cta">Buy Onyx Storm Now – $9.99</a>
-          </div>
-        `;
-      });
+          html += `
+            <div class="feed-item">
+              <h3>${title}</h3>
+              <p><strong>Date:</strong> ${pubDate}</p>
+              <p>${description}</p>
+              <p><a href="${link}" target="_blank">Read more</a></p>
+              <a href="https://respirework.com/buy-now" class="cta">Buy Onyx Storm Now – $9.99</a>
+            </div>
+          `;
+        });
 
-      document.getElementById("feed-container").innerHTML = html;
+        document.getElementById("feed-container").innerHTML = html || "<p>No updates available.</p>";
+      } catch (error) {
+        console.error("Failed to load feed:", error);
+        document.getElementById("feed-container").innerHTML = "<p>Error loading feed. Please try again later.</p>";
+      }
     }
 
-    loadFeeds();
+    loadFeed();
   </script>
 </body>
 </html>
