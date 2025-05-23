@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>RespireWork - Combined Feeds</title>
+    <link>https://www.respirework.com</link>
+    <description>Master RSS feed linking to the Empyrean Series and Rebecca Yarros updates.</description>
+
+    <item>
+      <title>The Empyrean Series RSS Feed</title>
+      <link>https://www.respirework.com/rss/empyrean-series.xml</link>
+      <guid isPermaLink="false">feed-empyrean</guid>
+      <description>Get the latest updates and new chapters from the Empyrean fantasy series.</description>
+      <pubDate>Wed, 22 May 2024 12:00:00 GMT</pubDate>
+    </item>
+
+    <item>
+      <title>Rebecca Yarros Author RSS Feed</title>
+      <link>https://www.respirework.com/rss/rebecca-yarros.xml</link>
+      <guid isPermaLink="false">feed-rebecca</guid>
+      <description>Follow Rebecca Yarros for new book releases and author announcements.</description>
+      <pubDate>Wed, 22 May 2024 12:00:00 GMT</pubDate>
+    </item>
+  </channel>
+</rss>
