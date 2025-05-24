@@ -1,51 +1,79 @@
 import os
 import csv
+from datetime import datetime
 
-# Read locations from CSV
-with open('locations.csv', newline='', encoding='utf-8') as f:
+# Paths
+locations_file = "locations.csv"
+output_folder = "generated_pages"
+sitemap_file = os.path.join(output_folder, "sitemap.xml")
+
+# Footer to include in every page
+footer_html = """
+<footer style="margin-top: 50px; font-size: 14px; text-align: center;">
+  <p>&copy; 2025 Respirework. All rights reserved.</p>
+  <p>
+    <a href="/index.html">Home</a> | 
+    <a href="/rss/empyrean-series.xml">RSS Feed</a> | 
+    <a href="/privacy.html">Privacy</a> | 
+    <a href="/terms.html">Terms</a> | 
+    <a href="/sitemap.xml">Sitemap</a>
+  </p>
+</footer>
+"""
+
+# HTML Page Template
+html_template = """<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Top Fantasy Ebooks in {{ city }}, {{ country }}</title>
+  <meta name="description" content="Find the best fantasy ebooks in {{ city }}, {{ country }}. Read Onyx Storm by Rebecca Yarros.">
+</head>
+<body>
+  <h1>Top Fantasy Ebooks in {{ city }}, {{ country }}</h1>
+  <p>"Onyx Storm" is the latest epic fantasy in The Empyrean series. Buy it today!</p>
+  <a href="https://www.respirework.com/onyx-storm">Buy Now</a>
+  {{ footer }}
+</body>
+</html>
+"""
+
+# Prepare output folder
+os.makedirs(output_folder, exist_ok=True)
+
+# Read locations
+with open(locations_file, "r", encoding="utf-8") as f:
     reader = csv.reader(f)
     locations = list(reader)
 
-# Template for the page
-page_template = '''<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Top Fantasy Ebooks in {{ city }}, {{ country }}</title>
-    <meta name="description" content="Looking for the best fantasy ebooks in {{ city }}, {{ country }}? Get your hands on the most exciting fantasy book, Onyx Storm: The Empyrean #3, by Rebecca Yarros.">
-    <meta name="keywords" content="Fantasy books, {{ city }} fantasy ebooks, {{ country }} ebooks, Onyx Storm, Rebecca Yarros, buy fantasy ebooks">
-</head>
-<body>
-    <header>
-        <h1>Top Fantasy Ebooks in {{ city }}, {{ country }}</h1>
-    </header>
+# Build sitemap
+sitemap_entries = []
+today = datetime.utcnow().strftime("%Y-%m-%d")
 
-    <section>
-        <h2>Featured Book: Onyx Storm: The Empyrean #3</h2>
-        <p>Looking for an exciting fantasy novel? Check out "Onyx Storm: The Empyrean #3" by Rebecca Yarros. This thrilling book features dragons, rebellion, and adventure!</p>
-        <a href="https://www.respirework.com/onyx-storm" target="_blank">Buy Now</a>
-    </section>
+for country, city in locations:
+    filename = f"top-fantasy-ebooks-in-{city.lower().replace(' ', '-')}-{country.lower().replace(' ', '-')}.html"
+    filepath = os.path.join(output_folder, filename)
 
-    <footer>
-        <p>For more details, visit our <a href="https://www.respirework.com">homepage</a>.</p>
-    </footer>
-</body>
-</html>
-'''
+    # Replace placeholders
+    html = html_template.replace("{{ city }}", city.title()).replace("{{ country }}", country.title())
+    html = html.replace("{{ footer }}", footer_html)
 
-# Directory to store pages
-output_dir = 'generated_pages'
-os.makedirs(output_dir, exist_ok=True)
+    # Write page
+    with open(filepath, "w", encoding="utf-8") as page:
+        page.write(html)
 
-# Generate HTML pages
-for location in locations:
-    country, city = location
-    page_content = page_template.replace("{{ country }}", country).replace("{{ city }}", city)
+    # Add to sitemap
+    sitemap_entries.append(f"""
+  <url>
+    <loc>https://www.respirework.com/generated_pages/{filename}</loc>
+    <lastmod>{today}</lastmod>
+  </url>
+""")
 
-    # Save to file
-    filename = f'{output_dir}/top-fantasy-ebooks-in-{city}-{country}.html'
-    with open(filename, 'w', encoding='utf-8') as f:
-        f.write(page_content)
-
-    print(f'Generated: {filename}')
+# Write sitemap
+with open(sitemap_file, "w", encoding="utf-8") as f:
+    f.write(f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{''.join(sitemap_entries)}
+</urlset>
+""")
