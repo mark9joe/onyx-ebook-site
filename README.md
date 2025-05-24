@@ -1,12 +1,7 @@
----
-title: onyx-ebook1
-emoji: 🐳
-colorFrom: red
-colorTo: green
-sdk: static
-pinned: false
-tags:
-  - deepsite
----
+# RespireWork Backlink Builder
 
-Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
+This repo automates free backlink generation using:
+- RSS pinging
+- Location-based SEO pages
+- Feeder site templates
+- Widget for tracking backlinks
