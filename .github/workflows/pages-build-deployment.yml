@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
@@ -10,20 +10,24 @@ permissions:
   pages: write
   id-token: write
 
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source
+      - name: Checkout
         uses: actions/checkout@v3
 
       - name: Set up Pages
         uses: actions/configure-pages@v4
 
-      - name: Build your site
+      - name: Build Output
         run: |
-          mkdir output
-          echo "Site built successfully!" > output/index.html
+          mkdir -p output
+          cp -r * output || true  # Copy your site files into output folder
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
