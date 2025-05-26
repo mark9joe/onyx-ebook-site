@@ -24,7 +24,7 @@ jobs:
       - name: Run redirect generator script
         run: python generate_redirects_from_rss.py
 
-      - name: Commit and push changes
+      - name: Commit and push changes if any
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
