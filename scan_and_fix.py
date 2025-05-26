@@ -1,51 +1,55 @@
 import os
 from urllib.parse import urlparse
-from generate_template import generate_html
-from datetime import datetime
+from generate_template import generate_template
 
-broken_urls = [
+# Directory where your static site is stored
+BASE_DIR = "."
+
+# List of broken/missing paths (relative to domain)
+BROKEN_PATHS = [
     "events/yarros-tour-2025",
     "news/fourth-wing-award",
     "hundreds-of-millions-at-risk-from-chinese-shopping-app-malware",
     "ukraines-zelensky-regrets-meltdown-meeting-with-trump-and-vows-to-work-together-for-peace"
 ]
 
-sitemap_path = "sitemap.xml"
-domain = "https://www.respirework.com"
+SITEMAP_FILE = os.path.join(BASE_DIR, "sitemap.xml")
 
-def create_page(path):
-    folder = os.path.dirname(path)
-    if folder and not os.path.exists(folder):
-        os.makedirs(folder)
-    with open(f"{path}/index.html", "w") as f:
-        f.write(generate_html(title=path.replace("-", " ").title()))
+def generate_page(slug):
+    html = generate_template(slug)
+    page_dir = os.path.join(BASE_DIR, slug)
+    os.makedirs(page_dir, exist_ok=True)
+    file_path = os.path.join(page_dir, "index.html")
+    with open(file_path, "w", encoding="utf-8") as f:
+        f.write(html)
+    print(f"Generated: {file_path}")
 
-def update_sitemap(pages):
-    if not os.path.exists(sitemap_path):
-        with open(sitemap_path, "w") as f:
-            f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-            f.write('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n')
+def update_sitemap(urls):
+    sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    sitemap += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
 
-    with open(sitemap_path, "a") as f:
-        for page in pages:
-            f.write("  <url>\n")
-            f.write(f"    <loc>{domain}/{page}</loc>\n")
-            f.write(f"    <lastmod>{datetime.utcnow().strftime('%Y-%m-%d')}</lastmod>\n")
-            f.write("    <changefreq>weekly</changefreq>\n")
-            f.write("    <priority>0.8</priority>\n")
-            f.write("  </url>\n")
+    for url in urls:
+        sitemap += f"  <url><loc>https://www.respirework.com/{url}</loc></url>\n"
 
-    with open(sitemap_path, "a") as f:
-        f.write('</urlset>\n')
+    sitemap += '</urlset>\n'
+
+    with open(SITEMAP_FILE, "w", encoding="utf-8") as f:
+        f.write(sitemap)
+    print(f"Updated sitemap.xml with {len(urls)} entries.")
+
+def main():
+    generated_urls = []
+
+    for slug in BROKEN_PATHS:
+        index_path = os.path.join(BASE_DIR, slug, "index.html")
+        if not os.path.exists(index_path):
+            generate_page(slug)
+            generated_urls.append(slug)
+
+    if generated_urls:
+        update_sitemap(generated_urls)
+    else:
+        print("No new pages generated. Sitemap not updated.")
 
 if __name__ == "__main__":
-    fixed = []
-    for url in broken_urls:
-        if not os.path.exists(os.path.join(url, "index.html")):
-            create_page(url)
-            fixed.append(url)
-    if fixed:
-        update_sitemap(fixed)
-        print(f"Fixed and added to sitemap: {fixed}")
-    else:
-        print("No missing pages found.")
+    main()
