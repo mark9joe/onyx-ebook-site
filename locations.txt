@@ -586,3 +586,46 @@ West Virginia,USA
 Wisconsin,USA
 Wyoming,USA
 District of Columbia,USA
+Toronto,Canada
+Montreal,Canada
+Vancouver,Canada
+Calgary,Canada
+Edmonton,Canada
+Ottawa,Canada
+Winnipeg,Canada
+Quebec City,Canada
+Hamilton,Canada
+Kitchener,Canada
+London,Canada
+Victoria,Canada
+Halifax,Canada
+Oshawa,Canada
+Windsor,Canada
+Saskatoon,Canada
+Regina,Canada
+St. John's,Canada
+Barrie,Canada
+Kelowna,Canada
+Abbotsford,Canada
+Sherbrooke,Canada
+Guelph,Canada
+Kingston,Canada
+Trois-Rivières,Canada
+Moncton,Canada
+Saint John,Canada
+Thunder Bay,Canada
+Peterborough,Canada
+Lethbridge,Canada
+Alberta,Canada
+British Columbia,Canada
+Manitoba,Canada
+New Brunswick,Canada
+Newfoundland and Labrador,Canada
+Northwest Territories,Canada
+Nova Scotia,Canada
+Nunavut,Canada
+Ontario,Canada
+Prince Edward Island,Canada
+Quebec,Canada
+Saskatchewan,Canada
+Yukon,Canada
