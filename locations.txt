@@ -1301,3 +1301,73 @@ Kujalleq,Greenland
 Qaasuitsup,Greenland
 Qeqqata,Greenland
 Sermersooq,Greenland
+Sydney,Australia
+Melbourne,Australia
+Brisbane,Australia
+Perth,Australia
+Adelaide,Australia
+Canberra,Australia
+Hobart,Australia
+Darwin,Australia
+Newcastle,Australia
+Wollongong,Australia
+Geelong,Australia
+Ballarat,Australia
+Cairns,Australia
+Townsville,Australia
+Gold Coast,Australia
+Toowoomba,Australia
+Mount Gambier,Australia
+Bunbury,Australia
+Geraldton,Australia
+Kalgoorlie,Australia
+Launceston,Australia
+Devonport,Australia
+Alice Springs,Australia
+Auckland,New Zealand
+Wellington,New Zealand
+Christchurch,New Zealand
+Hamilton,New Zealand
+Tauranga,New Zealand
+Dunedin,New Zealand
+Palmerston North,New Zealand
+Napier,New Zealand
+Hastings,New Zealand
+New Plymouth,New Zealand
+Rotorua,New Zealand
+Whangarei,New Zealand
+Nelson,New Zealand
+Invercargill,New Zealand
+Lower Hutt,New Zealand
+Upper Hutt,New Zealand
+Porirua,New Zealand
+Gisborne,New Zealand
+Blenheim,New Zealand
+Timaru,New Zealand
+Queenstown,New Zealand
+Richmond,New Zealand
+Greymouth,New Zealand
+New South Wales,Australia
+Victoria,Australia
+Queensland,Australia
+South Australia,Australia
+Western Australia,Australia
+Tasmania,Australia
+Australian Capital Territory,Australia
+Northern Territory,Australia
+Auckland,New Zealand
+Northland,New Zealand
+Waikato,New Zealand
+Bay of Plenty,New Zealand
+Gisborne,New Zealand
+Hawke’s Bay,New Zealand
+Taranaki,New Zealand
+Manawatu-Wanganui,New Zealand
+Wellington,New Zealand
+Tasman,New Zealand
+Nelson,New Zealand
+Marlborough,New Zealand
+West Coast,New Zealand
+Canterbury,New Zealand
+Otago,New Zealand
+Southland,New Zealand
