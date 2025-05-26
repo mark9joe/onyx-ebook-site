@@ -14,10 +14,10 @@ reddit = praw.Reddit(
 # List of subreddits that allow promotions
 subreddits = [
     "selfpromotion",
-    "bookmarketing",
-    "FreeBooksOnline",
     "indieauthors",
-    "GetMoreViewsYT"
+    "FreeBooksOnline",
+    "GetMoreViewsYT",
+    "MarketYourBook"
 ]
 
 # Titles to rotate
@@ -38,7 +38,7 @@ link_url = "https://www.respirework.com"
 try:
     submission = reddit.subreddit(selected_subreddit).submit(
     title=selected_title,
-    selftext="Discover this epic fantasy book featuring dragons and rebellion: https://www.respirework.com"
+    selftext="Check out this epic fantasy book — Onyx Storm (The Empyrean #3)! Featuring dragons, rebellion, and magic.\n\nRead more: https://www.respirework.com"
 )
     print(f"✅ Successfully posted to r/{selected_subreddit}: {submission.permalink}")
 except Exception as e:
