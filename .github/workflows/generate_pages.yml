@@ -1,30 +1,36 @@
-name: Generate Pages
+name: Generate 100K Pages
 
 on:
-  workflow_dispatch:
   schedule:
     - cron: "*/1 * * * *"  # every 1 minute
+  workflow_dispatch:
 
 jobs:
-  build-pages:
+  generate:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
 
-      - name: Setup Python
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      - name: Generate Pages
+      - name: Install Requirements
         run: |
           pip install -r requirements.txt
+
+      - name: Generate HTML Pages
+        run: |
+          mkdir -p public/pages
           python generate_pages.py
 
-      - name: Commit Pages
+      - name: Commit Generated Pages
         run: |
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
           git add public/pages/
-          git commit -m "Generated pages"
-          git push || echo "No changes to commit"
+          git commit -m "✅ Generated 100K pages" || echo "No changes to commit"
+          git push
