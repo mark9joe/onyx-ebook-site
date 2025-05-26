@@ -1,10 +1,10 @@
-name: GitHub Pages Deploy
+name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: ["main"]
   schedule:
-    - cron: "*/1 * * * *"
+    - cron: "*/1 * * * *"  # Every 1 minute
   workflow_dispatch:
 
 permissions:
@@ -12,24 +12,25 @@ permissions:
   pages: write
   id-token: write
 
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    concurrency:
-      group: "pages"
-      cancel-in-progress: true
 
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
-      - name: Upload GitHub Pages artifact
+      - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          path: ./
+          path: "."  # The root of your repo (your site folder)
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v2
