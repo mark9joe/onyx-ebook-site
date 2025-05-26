@@ -9,7 +9,7 @@ reddit = praw.Reddit(
     user_agent=os.getenv("REDDIT_AGENT")
 )
 
-subreddit = reddit.subreddit("YourSubredditNameHere")
+subreddit = reddit.subreddit("selfpromotion")
 title = "🔥 Just Released: Onyx Storm - Epic Fantasy eBook!"
 url = "https://www.respirework.com"
 
