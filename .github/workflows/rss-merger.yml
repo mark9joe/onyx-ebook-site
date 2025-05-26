@@ -1,33 +1,39 @@
-name: Update RSS Feed
+name: RSS Merger & Feed Generator
 
 on:
   schedule:
-    - cron: "0 */6 * * *"  # every 6 hours
+    - cron: "*/15 * * * *"  # Every 15 minutes
   workflow_dispatch:
 
 jobs:
-  build:
+  generate-rss:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repo
+    - name: Checkout Repository
       uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
       with:
-        node-version: '18'
+        python-version: '3.10'
 
-    - name: Install dependencies
-      run: npm install rss-parser
-
-    - name: Run merger script
-      run: node scripts/merge-rss.js
-
-    - name: Commit and push changes
+    - name: Install Dependencies
       run: |
-        git config --global user.name 'GitHub Action'
-        git config --global user.email 'action@github.com'
-        git add rss/empyrean-series.xml
-        git commit -m "Auto-update merged RSS feed"
-        git push
+        pip install -r requirements.txt
+
+    - name: Run RSS Feed Generator
+      run: python rss_submitter.py
+
+    - name: Commit & Push RSS Updates
+      run: |
+        git config --global user.name "GitHub Action"
+        git config --global user.email "action@github.com"
+        git add -A
+        git status
+        if git diff --cached --quiet; then
+          echo "✅ No changes to commit."
+        else
+          git commit -m "Auto update RSS feeds"
+          git push
+        fi
