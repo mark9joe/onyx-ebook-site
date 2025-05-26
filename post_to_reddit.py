@@ -2,7 +2,7 @@ import os
 import random
 import praw
 
-# Reddit authentication
+# Authenticate Reddit client using environment variables
 reddit = praw.Reddit(
     client_id=os.getenv("REDDIT_CLIENT_ID"),
     client_secret=os.getenv("REDDIT_SECRET"),
@@ -11,16 +11,22 @@ reddit = praw.Reddit(
     user_agent=os.getenv("REDDIT_AGENT")
 )
 
-# List of subreddits that allow promotions
-subreddits = [
+# Subreddits grouped by post type
+link_subreddits = [
+    "FreeEBOOKS",
+    "BookPromo",
+    "FreeBooksOnline",
+    "PromoteYourBusiness"
+]
+
+text_subreddits = [
     "selfpromotion",
     "indieauthors",
-    "FreeBooksOnline",
     "GetMoreViewsYT",
     "MarketYourBook"
 ]
 
-# Titles to rotate
+# Post titles
 titles = [
     "🔥 Onyx Storm: A Fantasy Book Lovers’ Must-Read!",
     "New eBook Just Dropped — Dragons, Magic & Rebellion Await!",
@@ -29,17 +35,33 @@ titles = [
     "Don’t Miss This Book: The Empyrean Series Continues!"
 ]
 
-# Randomly choose subreddit and title
-selected_subreddit = random.choice(subreddits)
-selected_title = random.choice(titles)
-link_url = "https://www.respirework.com"
-
-# Post to Reddit
-try:
-    submission = reddit.subreddit(selected_subreddit).submit(
-    title=selected_title,
-    selftext="Check out this epic fantasy book — Onyx Storm (The Empyrean #3)! Featuring dragons, rebellion, and magic.\n\nRead more: https://www.respirework.com"
+# Website to link to
+url = "https://www.respirework.com"
+description = (
+    "Check out this epic fantasy book — **Onyx Storm (The Empyrean #3)**!\n\n"
+    "Dragons, rebellion, magic — and a world waiting to be saved.\n\n"
+    f"Read now: {url}"
 )
-    print(f"✅ Successfully posted to r/{selected_subreddit}: {submission.permalink}")
-except Exception as e:
-    print(f"❌ Failed to post: {e}")
+
+# Randomly choose type
+post_type = random.choice(["link", "text"])
+
+if post_type == "link":
+    subreddit_name = random.choice(link_subreddits)
+    title = random.choice(titles)
+    try:
+        subreddit = reddit.subreddit(subreddit_name)
+        submission = subreddit.submit(title=title, url=url)
+        print(f"✅ Link post to r/{subreddit_name} succeeded: {submission.permalink}")
+    except Exception as e:
+        print(f"❌ Failed to post link: {e}")
+
+else:
+    subreddit_name = random.choice(text_subreddits)
+    title = random.choice(titles)
+    try:
+        subreddit = reddit.subreddit(subreddit_name)
+        submission = subreddit.submit(title=title, selftext=description)
+        print(f"✅ Text post to r/{subreddit_name} succeeded: {submission.permalink}")
+    except Exception as e:
+        print(f"❌ Failed to post text: {e}")
