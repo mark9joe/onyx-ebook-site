@@ -9,8 +9,9 @@ reddit = praw.Reddit(
     user_agent=os.getenv("REDDIT_AGENT")
 )
 
-subreddit = reddit.subreddit("selfpromotion")
-title = "🔥 Just Released: Onyx Storm - Epic Fantasy eBook!"
+subreddit = reddit.subreddit("test")  # safest option for testing
+
+title = "🚀 Test Launch: Onyx Storm Fantasy Book Now Available!"
 url = "https://www.respirework.com"
 
 submission = subreddit.submit(title=title, url=url)
