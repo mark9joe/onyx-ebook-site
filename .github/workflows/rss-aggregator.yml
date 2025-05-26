@@ -2,38 +2,29 @@ name: RSS Aggregator Auto Submitter
 
 on:
   schedule:
-    - cron: "*/15 * * * *"  # Every 15 minutes
+    - cron: "*/15 * * * *"
   workflow_dispatch:
 
 jobs:
-  run-script:
+  update-rss:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+    - uses: actions/checkout@v3
 
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
 
-    - name: Install Python dependencies
-      run: |
-        pip install -r requirements.txt
+    - name: Generate RSS Feeds
+      run: python rss_submitter.py
 
-    - name: Run RSS Aggregator script
-      run: python rss_submitter.py  # Make sure this file exists in the root directory
-
-    - name: Configure Git
+    - name: Commit & Push updated RSS feeds
       run: |
         git config --global user.name "GitHub Action"
         git config --global user.email "action@github.com"
-        echo "node_modules/" >> .gitignore
-
-    - name: Commit & Push updated content (if any)
-      run: |
-        git add -A
+        git add rss.xml empyrean-series.xml rebecca-yarros.xml
         git status
-        git commit -m "Automated RSS updates" || true
-        git push || true
+        git commit -m "Auto update RSS feeds" || echo "No changes to commit"
+        git push || echo "Nothing to push"
