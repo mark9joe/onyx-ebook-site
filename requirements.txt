@@ -2,3 +2,4 @@ praw
 # No third-party packages required
 selenium
 webdriver-manager
+feedparser
