@@ -1,16 +1,16 @@
-name: RSS Redirect Generator
+name: Redirect RSS Posts to Original Pages
 
 on:
   schedule:
-    - cron: "*/30 * * * *"  # Every 30 minutes
-  workflow_dispatch:
+    - cron: "*/30 * * * *"  # Run every 30 minutes
+  workflow_dispatch:  # Manual trigger
 
 jobs:
-  generate_redirects:
+  redirect:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Set up Python
@@ -18,19 +18,17 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install Python dependencies
-        run: pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
 
-      - name: Run redirect generator script
+      - name: Run redirect script
         run: python generate_redirects_from_rss.py
 
-      - name: Commit and push changes if any
+      - name: Commit and push changes
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
           git add .
-          if [ -n "$(git status --porcelain)" ]; then
-            git commit -m "Auto update: generated RSS redirect HTML files"
-            git push
-          else
-            echo "No changes to commit"
+          git diff-index --quiet HEAD || git commit -m "Auto-redirect RSS posts to original pages"
+          git push
