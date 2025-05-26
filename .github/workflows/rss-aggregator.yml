@@ -1,4 +1,4 @@
-name: RSS Aggregator Auto Pinger
+name: RSS Aggregator Auto Submitter
 
 on:
   schedule:
@@ -6,33 +6,30 @@ on:
   workflow_dispatch:
 
 jobs:
-  ping:
+  run-script:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
+    - name: Checkout repo
       uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
       with:
-        node-version: '18'
+        python-version: '3.10'
 
     - name: Install dependencies
-      run: npm install
+      run: |
+        pip install -r requirements.txt
 
-    - name: Run RSS Aggregator Script
-      run: node your-rss-script.js  # Replace with your filename
+    - name: Run RSS Aggregator script
+      run: python rss_submitter.py
 
-    - name: Configure Git
+    - name: Commit & Push updated content (if any)
       run: |
         git config --global user.name 'GitHub Action'
         git config --global user.email 'action@github.com'
-        echo "node_modules/" >> .gitignore
-
-    - name: Commit and Push updates
-      run: |
         git add -A
-        git commit -m "Automated RSS feed submission"
+        git commit -m "Automated RSS updates"
         git push
       continue-on-error: true
