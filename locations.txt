@@ -629,3 +629,675 @@ Prince Edward Island,Canada
 Quebec,Canada
 Saskatchewan,Canada
 Yukon,Canada
+Amsterdam,Netherlands
+Rotterdam,Netherlands
+The Hague,Netherlands
+Utrecht,Netherlands
+Eindhoven,Netherlands
+Groningen,Netherlands
+Tilburg,Netherlands
+Almere,Netherlands
+Breda,Netherlands
+Nijmegen,Netherlands
+Athens,Greece
+Thessaloniki,Greece
+Patras,Greece
+Heraklion,Greece
+Larissa,Greece
+Volos,Greece
+Rhodes,Greece
+Ioannina,Greece
+Chania,Greece
+Kavala,Greece
+Berlin,Germany
+Hamburg,Germany
+Munich,Germany
+Cologne,Germany
+Frankfurt,Germany
+Stuttgart,Germany
+Düsseldorf,Germany
+Dortmund,Germany
+Essen,Germany
+Leipzig,Germany
+Bratislava,Slovakia
+Košice,Slovakia
+Prešov,Slovakia
+Žilina,Slovakia
+Nitra,Slovakia
+Banská Bystrica,Slovakia
+Trnava,Slovakia
+Martin,Slovakia
+Trenčín,Slovakia
+Poprad,Slovakia
+Brussels,Belgium
+Antwerp,Belgium
+Ghent,Belgium
+Charleroi,Belgium
+Liège,Belgium
+Bruges,Belgium
+Namur,Belgium
+Leuven,Belgium
+Mons,Belgium
+Aalst,Belgium
+Bucharest,Romania
+Cluj-Napoca,Romania
+Timișoara,Romania
+Iași,Romania
+Constanța,Romania
+Craiova,Romania
+Brașov,Romania
+Galați,Romania
+Ploiești,Romania
+Oradea,Romania
+Budapest,Hungary
+Debrecen,Hungary
+Szeged,Hungary
+Miskolc,Hungary
+Pécs,Hungary
+Győr,Hungary
+Nyíregyháza,Hungary
+Kecskemét,Hungary
+Székesfehérvár,Hungary
+Szombathely,Hungary
+Copenhagen,Denmark
+Aarhus,Denmark
+Odense,Denmark
+Aalborg,Denmark
+Esbjerg,Denmark
+Randers,Denmark
+Kolding,Denmark
+Horsens,Denmark
+Vejle,Denmark
+Roskilde,Denmark
+Dublin,Ireland
+Cork,Ireland
+Limerick,Ireland
+Galway,Ireland
+Waterford,Ireland
+Drogheda,Ireland
+Dundalk,Ireland
+Swords,Ireland
+Bray,Ireland
+Navan,Ireland
+Helsinki,Finland
+Espoo,Finland
+Tampere,Finland
+Vantaa,Finland
+Oulu,Finland
+Turku,Finland
+Jyväskylä,Finland
+Lahti,Finland
+Kuopio,Finland
+Pori,Finland
+Lisbon,Portugal
+Porto,Portugal
+Braga,Portugal
+Coimbra,Portugal
+Faro,Portugal
+Aveiro,Portugal
+Viseu,Portugal
+Guimarães,Portugal
+Évora,Portugal
+Funchal,Portugal
+Ljubljana,Slovenia
+Maribor,Slovenia
+Celje,Slovenia
+Kranj,Slovenia
+Velenje,Slovenia
+Koper,Slovenia
+Novo Mesto,Slovenia
+Ptuj,Slovenia
+Trbovlje,Slovenia
+Kamnik,Slovenia
+Luxembourg City,Luxembourg
+Esch-sur-Alzette,Luxembourg
+Differdange,Luxembourg
+Dudelange,Luxembourg
+Ettelbruck,Luxembourg
+Diekirch,Luxembourg
+Wiltz,Luxembourg
+Rumelange,Luxembourg
+Grevenmacher,Luxembourg
+Remich,Luxembourg
+Madrid,Spain
+Barcelona,Spain
+Valencia,Spain
+Seville,Spain
+Zaragoza,Spain
+Malaga,Spain
+Murcia,Spain
+Palma,Spain
+Las Palmas,Spain
+Bilbao,Spain
+Nicosia,Cyprus
+Limassol,Cyprus
+Larnaca,Cyprus
+Paphos,Cyprus
+Famagusta,Cyprus
+Kyrenia,Cyprus
+Aradippou,Cyprus
+Paralimni,Cyprus
+Latsia,Cyprus
+Aglandjia,Cyprus
+Paris,France
+Marseille,France
+Lyon,France
+Toulouse,France
+Nice,France
+Nantes,France
+Strasbourg,France
+Montpellier,France
+Bordeaux,France
+Lille,France
+Prague,Czech Republic
+Brno,Czech Republic
+Ostrava,Czech Republic
+Plzeň,Czech Republic
+Liberec,Czech Republic
+Olomouc,Czech Republic
+Ústí nad Labem,Czech Republic
+Hradec Králové,Czech Republic
+České Budějovice,Czech Republic
+Pardubice,Czech Republic
+Riga,Latvia
+Daugavpils,Latvia
+Liepāja,Latvia
+Jelgava,Latvia
+Jūrmala,Latvia
+Ventspils,Latvia
+Rēzekne,Latvia
+Valmiera,Latvia
+Ogre,Latvia
+Tukums,Latvia
+Rome,Italy
+Milan,Italy
+Naples,Italy
+Turin,Italy
+Palermo,Italy
+Genoa,Italy
+Bologna,Italy
+Florence,Italy
+Bari,Italy
+Catania,Italy
+Sofia,Bulgaria
+Plovdiv,Bulgaria
+Varna,Bulgaria
+Burgas,Bulgaria
+Ruse,Bulgaria
+Stara Zagora,Bulgaria
+Pleven,Bulgaria
+Sliven,Bulgaria
+Dobrich,Bulgaria
+Shumen,Bulgaria
+Stockholm,Sweden
+Gothenburg,Sweden
+Malmö,Sweden
+Uppsala,Sweden
+Västerås,Sweden
+Örebro,Sweden
+Linköping,Sweden
+Helsingborg,Sweden
+Jönköping,Sweden
+Norrköping,Sweden
+Tallinn,Estonia
+Tartu,Estonia
+Narva,Estonia
+Pärnu,Estonia
+Kohtla-Järve,Estonia
+Viljandi,Estonia
+Rakvere,Estonia
+Maardu,Estonia
+Kuressaare,Estonia
+Sillamäe,Estonia
+Valletta,Malta
+Birkirkara,Malta
+Qormi,Malta
+Mosta,Malta
+Żabbar,Malta
+Sliema,Malta
+Żebbuġ,Malta
+Naxxar,Malta
+Żejtun,Malta
+Fgura,Malta
+Vienna,Austria
+Graz,Austria
+Linz,Austria
+Salzburg,Austria
+Innsbruck,Austria
+Klagenfurt,Austria
+Villach,Austria
+Wels,Austria
+Sankt Pölten,Austria
+Dornbirn,Austria
+Vilnius,Lithuania
+Kaunas,Lithuania
+Klaipėda,Lithuania
+Šiauliai,Lithuania
+Panevėžys,Lithuania
+Alytus,Lithuania
+Marijampolė,Lithuania
+Mažeikiai,Lithuania
+Jonava,Lithuania
+Utena,Lithuania
+Warsaw,Poland
+Kraków,Poland
+Łódź,Poland
+Wrocław,Poland
+Poznań,Poland
+Gdańsk,Poland
+Szczecin,Poland
+Bydgoszcz,Poland
+Lublin,Poland
+Katowice,Poland
+Zagreb,Croatia
+Split,Croatia
+Rijeka,Croatia
+Osijek,Croatia
+Zadar,Croatia
+Slavonski Brod,Croatia
+Pula,Croatia
+Karlovac,Croatia
+Varaždin,Croatia
+Šibenik,Croatia
+London,United Kingdom
+Birmingham,United Kingdom
+Manchester,United Kingdom
+Glasgow,United Kingdom
+Liverpool,United Kingdom
+Bristol,United Kingdom
+Sheffield,United Kingdom
+Leeds,United Kingdom
+Edinburgh,United Kingdom
+Leicester,United Kingdom
+Nuuk,Greenland
+Sisimiut,Greenland
+Ilulissat,Greenland
+Qaqortoq,Greenland
+Aasiaat,Greenland
+Maniitsoq,Greenland
+Tasiilaq,Greenland
+Paamiut,Greenland
+Narsaq,Greenland
+Nanortalik,Greenland
+Drenthe,Netherlands
+Flevoland,Netherlands
+Friesland,Netherlands
+Gelderland,Netherlands
+Groningen,Netherlands
+Limburg,Netherlands
+North Brabant,Netherlands
+North Holland,Netherlands
+Overijssel,Netherlands
+South Holland,Netherlands
+Utrecht,Netherlands
+Zeeland,Netherlands
+Attica,Greece
+Central Greece,Greece
+Central Macedonia,Greece
+Crete,Greece
+Eastern Macedonia and Thrace,Greece
+Epirus,Greece
+Ionian Islands,Greece
+North Aegean,Greece
+Peloponnese,Greece
+South Aegean,Greece
+Thessaly,Greece
+Western Greece,Greece
+Western Macedonia,Greece
+Baden-Württemberg,Germany
+Bavaria,Germany
+Berlin,Germany
+Brandenburg,Germany
+Bremen,Germany
+Hamburg,Germany
+Hesse,Germany
+Lower Saxony,Germany
+Mecklenburg-Vorpommern,Germany
+North Rhine-Westphalia,Germany
+Rhineland-Palatinate,Germany
+Saarland,Germany
+Saxony,Germany
+Saxony-Anhalt,Germany
+Schleswig-Holstein,Germany
+Thuringia,Germany
+Bratislava Region,Slovakia
+Trnava Region,Slovakia
+Trenčín Region,Slovakia
+Nitra Region,Slovakia
+Žilina Region,Slovakia
+Banská Bystrica Region,Slovakia
+Prešov Region,Slovakia
+Košice Region,Slovakia
+Brussels-Capital Region,Belgium
+Flanders,Belgium
+Wallonia,Belgium
+Alba,Romania
+Arad,Romania
+Argeș,Romania
+Bacău,Romania
+Bihor,Romania
+Bistrița-Năsăud,Romania
+Botoșani,Romania
+Brașov,Romania
+Brăila,Romania
+Bucharest,Romania
+Buzău,Romania
+Călărași,Romania
+Caraș-Severin,Romania
+Cluj,Romania
+Constanța,Romania
+Covasna,Romania
+Dâmbovița,Romania
+Dolj,Romania
+Galați,Romania
+Giurgiu,Romania
+Gorj,Romania
+Harghita,Romania
+Hunedoara,Romania
+Ialomița,Romania
+Iași,Romania
+Ilfov,Romania
+Maramureș,Romania
+Mehedinți,Romania
+Mureș,Romania
+Neamț,Romania
+Olt,Romania
+Prahova,Romania
+Sălaj,Romania
+Satu Mare,Romania
+Sibiu,Romania
+Suceava,Romania
+Teleorman,Romania
+Timiș,Romania
+Tulcea,Romania
+Vâlcea,Romania
+Vaslui,Romania
+Vrancea,Romania
+Baranya,Hungary
+Bács-Kiskun,Hungary
+Békés,Hungary
+Borsod-Abaúj-Zemplén,Hungary
+Csongrád,Hungary
+Fejér,Hungary
+Győr-Moson-Sopron,Hungary
+Hajdú-Bihar,Hungary
+Heves,Hungary
+Jász-Nagykun-Szolnok,Hungary
+Komárom-Esztergom,Hungary
+Nógrád,Hungary
+Pest,Hungary
+Somogy,Hungary
+Szabolcs-Szatmár-Bereg,Hungary
+Tolna,Hungary
+Vas,Hungary
+Veszprém,Hungary
+Zala,Hungary
+Capital Region of Denmark,Denmark
+Central Denmark Region,Denmark
+North Denmark Region,Denmark
+Region Zealand,Denmark
+Region of Southern Denmark,Denmark
+Connacht,Ireland
+Leinster,Ireland
+Munster,Ireland
+Ulster,Ireland
+Lapland,Finland
+North Ostrobothnia,Finland
+Kainuu,Finland
+North Karelia,Finland
+Northern Savonia,Finland
+Southern Savonia,Finland
+South Karelia,Finland
+Central Finland,Finland
+South Ostrobothnia,Finland
+Ostrobothnia,Finland
+Pirkanmaa,Finland
+Satakunta,Finland
+Central Ostrobothnia,Finland
+Southwest Finland,Finland
+Uusimaa,Finland
+Kymenlaakso,Finland
+Åland,Finland
+Aveiro,Portugal
+Azores,Portugal
+Beja,Portugal
+Braga,Portugal
+Bragança,Portugal
+Castelo Branco,Portugal
+Coimbra,Portugal
+Évora,Portugal
+Faro,Portugal
+Guarda,Portugal
+Leiria,Portugal
+Lisbon,Portugal
+Madeira,Portugal
+Portalegre,Portugal
+Porto,Portugal
+Santarém,Portugal
+Setúbal,Portugal
+Viana do Castelo,Portugal
+Vila Real,Portugal
+Viseu,Portugal
+Central Slovenia,Slovenia
+Upper Carniola,Slovenia
+Lower Sava,Slovenia
+Southeast Slovenia,Slovenia
+Carinthia,Slovenia
+Coastal-Karst,Slovenia
+Gorizia,Slovenia
+Inner Carniola,Slovenia
+Lower Carniola,Slovenia
+Mura,Slovenia
+Savinja,Slovenia
+Central Sava,Slovenia
+Luxembourg,Luxembourg
+Diekirch,Luxembourg
+Grevenmacher,Luxembourg
+Andalusia,Spain
+Aragon,Spain
+Asturias,Spain
+Balearic Islands,Spain
+Basque Country,Spain
+Canary Islands,Spain
+Cantabria,Spain
+Castile and León,Spain
+Castile-La Mancha,Spain
+Catalonia,Spain
+Extremadura,Spain
+Galicia,Spain
+La Rioja,Spain
+Madrid,Spain
+Murcia,Spain
+Navarre,Spain
+Valencian Community,Spain
+Famagusta,Cyprus
+Kyrenia,Cyprus
+Larnaca,Cyprus
+Limassol,Cyprus
+Nicosia,Cyprus
+Paphos,Cyprus
+Auvergne-Rhône-Alpes,France
+Bourgogne-Franche-Comté,France
+Brittany,France
+Centre-Val de Loire,France
+Corsica,France
+Grand Est,France
+Hauts-de-France,France
+Île-de-France,France
+Normandy,France
+Nouvelle-Aquitaine,France
+Occitanie,France
+Pays de la Loire,France
+Provence-Alpes-Côte d'Azur,France
+Prague,Czech Republic
+Central Bohemian Region,Czech Republic
+South Bohemian Region,Czech Republic
+Plzeň Region,Czech Republic
+Karlovy Vary Region,Czech Republic
+Ústí nad Labem Region,Czech Republic
+Liberec Region,Czech Republic
+Hradec Králové Region,Czech Republic
+Pardubice Region,Czech Republic
+Vysočina Region,Czech Republic
+South Moravian Region,Czech Republic
+Olomouc Region,Czech Republic
+Zlín Region,Czech Republic
+Moravian-Silesian Region,Czech Republic
+Kurzeme,Latvia
+Latgale,Latvia
+Riga,Latvia
+Vidzeme,Latvia
+Zemgale,Latvia
+Abruzzo,Italy
+Aosta Valley,Italy
+Apulia,Italy
+Basilicata,Italy
+Calabria,Italy
+Campania,Italy
+Emilia-Romagna,Italy
+Friuli-Venezia Giulia,Italy
+Lazio,Italy
+Liguria,Italy
+Lombardy,Italy
+Marche,Italy
+Molise,Italy
+Piedmont,Italy
+Sardinia,Italy
+Sicily,Italy
+Trentino-Alto Adige,Italy
+Tuscany,Italy
+Umbria,Italy
+Veneto,Italy
+Blagoevgrad,Bulgaria
+Burgas,Bulgaria
+Dobrich,Bulgaria
+Gabrovo,Bulgaria
+Haskovo,Bulgaria
+Kardzhali,Bulgaria
+Kyustendil,Bulgaria
+Lovech,Bulgaria
+Montana,Bulgaria
+Pazardzhik,Bulgaria
+Pernik,Bulgaria
+Pleven,Bulgaria
+Plovdiv,Bulgaria
+Razgrad,Bulgaria
+Ruse,Bulgaria
+Shumen,Bulgaria
+Silistra,Bulgaria
+Sliven,Bulgaria
+Smolyan,Bulgaria
+Sofia City,Bulgaria
+Sofia Province,Bulgaria
+Stara Zagora,Bulgaria
+Targovishte,Bulgaria
+Varna,Bulgaria
+Veliko Tarnovo,Bulgaria
+Vidin,Bulgaria
+Vratsa,Bulgaria
+Yambol,Bulgaria
+Blekinge,Sweden
+Dalarna,Sweden
+Gotland,Sweden
+Gävleborg,Sweden
+Halland,Sweden
+Jämtland,Sweden
+Jönköping,Sweden
+Kalmar,Sweden
+Kronoberg,Sweden
+Norrbotten,Sweden
+Örebro,Sweden
+Östergötland,Sweden
+Skåne,Sweden
+Södermanland,Sweden
+Stockholm,Sweden
+Uppsala,Sweden
+Värmland,Sweden
+Västerbotten,Sweden
+Västernorrland,Sweden
+Västmanland,Sweden
+Västra Götaland,Sweden
+Harju,Estonia
+Hiiu,Estonia
+Ida-Viru,Estonia
+Järva,Estonia
+Jõgeva,Estonia
+Lääne,Estonia
+Lääne-Viru,Estonia
+Pärnu,Estonia
+Põlva,Estonia
+Rapla,Estonia
+Saare,Estonia
+Tartu,Estonia
+Valga,Estonia
+Viljandi,Estonia
+Võru,Estonia
+Central Malta,Malta
+Gozo,Malta
+Northern Malta,Malta
+South Eastern Malta,Malta
+Southern Malta,Malta
+Burgenland,Austria
+Carinthia,Austria
+Lower Austria,Austria
+Salzburg,Austria
+Styria,Austria
+Tyrol,Austria
+Upper Austria,Austria
+Vienna,Austria
+Vorarlberg,Austria
+Alytus,Lithuania
+Kaunas,Lithuania
+Klaipėda,Lithuania
+Marijampolė,Lithuania
+Panevėžys,Lithuania
+Šiauliai,Lithuania
+Tauragė,Lithuania
+Telšiai,Lithuania
+Utena,Lithuania
+Vilnius,Lithuania
+Greater Poland,Poland
+Kuyavia-Pomerania,Poland
+Lesser Poland,Poland
+Łódź,Poland
+Lower Silesia,Poland
+Lublin,Poland
+Lubusz,Poland
+Masovia,Poland
+Opole,Poland
+Podlaskie,Poland
+Pomerania,Poland
+Silesia,Poland
+Subcarpathia,Poland
+Świętokrzyskie,Poland
+Warmia-Masuria,Poland
+West Pomerania,Poland
+Bjelovar-Bilogora,Croatia
+Brod-Posavina,Croatia
+Dubrovnik-Neretva,Croatia
+Istria,Croatia
+Karlovac,Croatia
+Koprivnica-Križevci,Croatia
+Krapina-Zagorje,Croatia
+Lika-Senj,Croatia
+Međimurje,Croatia
+Osijek-Baranja,Croatia
+Požega-Slavonia,Croatia
+Primorje-Gorski Kotar,Croatia
+Šibenik-Knin,Croatia
+Sisak-Moslavina,Croatia
+Split-Dalmatia,Croatia
+Varaždin,Croatia
+Virovitica-Podravina,Croatia
+Vukovar-Srijem,Croatia
+Zadar,Croatia
+Zagreb,Croatia
+Zagreb County,Croatia
+England,United Kingdom
+Scotland,United Kingdom
+Wales,United Kingdom
+Northern Ireland,United Kingdom
+Kujalleq,Greenland
+Qaasuitsup,Greenland
+Qeqqata,Greenland
+Sermersooq,Greenland
