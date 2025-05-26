@@ -1,33 +1,38 @@
-name: Update RSS Aggregator Feed
+name: RSS Aggregator Auto Pinger
 
 on:
   schedule:
-    - cron: "0 */6 * * *"
+    - cron: "*/15 * * * *"  # every 15 minutes
   workflow_dispatch:
 
 jobs:
-  build:
+  ping:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
 
-      - name: Install rss-parser
-        run: npm install rss-parser
+    - name: Install dependencies
+      run: npm install
 
-      - name: Run aggregator feed merger
-        run: node scripts/merge-aggregator.js
+    - name: Run RSS Aggregator Script
+      run: node your-rss-script.js  # Replace with your filename
 
-      - name: Commit and push
-        run: |
-          git config --global user.name 'GitHub Action'
-          git config --global user.email 'action@github.com'
-          git add docs/rss/rss-aggregator.xml
-          git commit -m "Auto-update general RSS aggregator"
-          git push
+    - name: Configure Git
+      run: |
+        git config --global user.name 'GitHub Action'
+        git config --global user.email 'action@github.com'
+        echo "node_modules/" >> .gitignore
+
+    - name: Commit and Push updates
+      run: |
+        git add -A
+        git commit -m "Automated RSS feed submission"
+        git push
+      continue-on-error: true
