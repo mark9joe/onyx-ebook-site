@@ -2,10 +2,10 @@ name: GitHub Pages Deploy
 
 on:
   push:
-    branches: [main]           # Triggers when you push to main
+    branches: [main]
   schedule:
-    - cron: "*/1 * * * *"      # Every 1 minute
-  workflow_dispatch:           # Manual trigger
+    - cron: "*/1 * * * *"
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -29,7 +29,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          path: ./              # Adjust if your output is in a subfolder like /build or /dist
+          path: ./
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v2
