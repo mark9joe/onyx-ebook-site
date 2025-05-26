@@ -1,36 +1,35 @@
 name: Update Sitemap and Ping Search Engines
 
 on:
-  push:
-    paths:
-      - 'public/**'
-      - 'sitemap_updater.py'
+  workflow_dispatch:     # Allow manual trigger
+  schedule:
+    - cron: "*/1 * * * *"  # Every 1 minute
 
 jobs:
-  build:
+  update-sitemap:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
 
-    - name: Run sitemap updater
-      run: python sitemap_updater.py
+      - name: Run sitemap updater
+        run: python scripts/update_sitemap.py
 
-    - name: Commit updated sitemap
-      run: |
-        git config user.name "GitHub Action"
-        git config user.email "action@github.com"
-        git add public/sitemap.xml
-        git commit -m "Update sitemap.xml from workflow" || echo "No changes"
-        git push
+      - name: Ping Google and Bing
+        run: |
+          curl "http://www.google.com/ping?sitemap=https://www.respirework.com/sitemap.xml"
+          curl "http://www.bing.com/ping?sitemap=https://www.respirework.com/sitemap.xml"
 
-    - name: Ping Google and Bing
-      run: |
-        curl "http://www.google.com/ping?sitemap=https://www.respirework.com/sitemap.xml"
-        curl "http://www.bing.com/ping?sitemap=https://www.respirework.com/sitemap.xml"
+      - name: Commit and push if changed
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add sitemap.xml
+          git diff --quiet || git commit -m "Auto-update sitemap.xml"
+          git push
