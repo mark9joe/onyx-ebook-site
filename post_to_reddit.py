@@ -2,7 +2,6 @@ import os
 import random
 import praw
 
-# Reddit authentication
 reddit = praw.Reddit(
     client_id=os.getenv("REDDIT_CLIENT_ID"),
     client_secret=os.getenv("REDDIT_SECRET"),
@@ -11,33 +10,23 @@ reddit = praw.Reddit(
     user_agent=os.getenv("REDDIT_AGENT")
 )
 
-# Safe text-post subreddits (no flair required)
-text_subreddits = [
-    "selfpromotion",
-    "indieauthors"
-]
-
 titles = [
     "🔥 Onyx Storm: A Fantasy Book Lovers’ Must-Read!",
-    "New eBook Just Dropped — Dragons, Magic & Rebellion Await!",
-    "Epic Fantasy Adventure with Dragons — Read Onyx Storm Today!"
+    "New eBook Just Dropped — Dragons, Magic & Rebellion Await!"
 ]
 
 description = (
-    "Discover an epic fantasy novel: **Onyx Storm (The Empyrean #3)**!\n\n"
-    "Featuring dragons, rebellion, and magic — it's the third chapter in a bestselling saga.\n\n"
-    "**Read more:** https://www.respirework.com"
+    "Discover the fantasy saga **Onyx Storm (The Empyrean #3)**.\n\n"
+    "Epic dragons, rebellion, magic — read it now: https://www.respirework.com"
 )
 
-# Choose subreddit + title
-subreddit_name = random.choice(text_subreddits)
+# Post to your own profile
 title = random.choice(titles)
-
 try:
-    submission = reddit.subreddit(subreddit_name).submit(
+    submission = reddit.subreddit("u_" + reddit.user.me().name).submit(
         title=title,
         selftext=description
     )
-    print(f"✅ Successfully posted to r/{subreddit_name}: {submission.permalink}")
+    print(f"✅ Posted to your Reddit profile: {submission.permalink}")
 except Exception as e:
-    print(f"❌ Failed to post: {e}")
+    print(f"❌ Failed: {e}")
