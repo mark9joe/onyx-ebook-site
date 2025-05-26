@@ -2,9 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: ["main"]
-  schedule:
-    - cron: "*/1 * * * *"  # Every 1 minute
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -12,25 +10,33 @@ permissions:
   pages: write
   id-token: write
 
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
-
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
+      - name: Checkout source
         uses: actions/checkout@v3
 
-      - name: Setup Pages
+      - name: Set up Pages
         uses: actions/configure-pages@v4
 
-      - name: Upload Pages Artifact
+      - name: Build your site
+        run: |
+          mkdir output
+          echo "Site built successfully!" > output/index.html
+
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          path: "."  # The root of your repo (your site folder)
+          path: ./output
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v2
