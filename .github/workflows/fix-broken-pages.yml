@@ -2,7 +2,7 @@ name: Fix Broken Pages
 
 on:
   schedule:
-    - cron: "*/30 * * * *"  # Every 30 minutes
+    - cron: "*/30 * * * *"  # Every 30 minutes UTC
   workflow_dispatch:
 
 jobs:
