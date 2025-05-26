@@ -1,33 +1,39 @@
-name: Update Rebecca Yarros RSS Feed
+name: Rebecca Yarros RSS Updater
 
 on:
   schedule:
-    - cron: "0 */6 * * *"
+    - cron: "*/15 * * * *"
   workflow_dispatch:
 
 jobs:
-  build:
+  update-rebecca-feed:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+    - name: Checkout repo
+      uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
 
-      - name: Install rss-parser
-        run: npm install rss-parser
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
 
-      - name: Run Rebecca feed merger
-        run: node scripts/merge-rebecca.js
+    - name: Generate rebecca-yarros.xml
+      run: python rss_submitter.py  # Make sure this file generates rebecca-yarros.xml
 
-      - name: Commit and push
-        run: |
-          git config --global user.name 'GitHub Action'
-          git config --global user.email 'action@github.com'
-          git add docs/rss/rebecca-yarros.xml
-          git commit -m "Auto-update Rebecca Yarros RSS feed"
+    - name: Commit & push updated RSS feed
+      run: |
+        git config --global user.name "GitHub Action"
+        git config --global user.email "action@github.com"
+        git add -A
+        git status
+        if git diff --cached --quiet; then
+          echo "✅ No changes to commit."
+        else
+          git commit -m "Update rebecca-yarros RSS feed"
           git push
+        fi
