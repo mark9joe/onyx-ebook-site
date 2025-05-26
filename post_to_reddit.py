@@ -14,10 +14,10 @@ reddit = praw.Reddit(
 # List of subreddits that allow promotions
 subreddits = [
     "selfpromotion",
-    "FreeEBOOKS",
-    "BookPromotion",
-    "PromoZone",
-    "SmallBusiness"
+    "bookmarketing",
+    "FreeBooksOnline",
+    "indieauthors",
+    "GetMoreViewsYT"
 ]
 
 # Titles to rotate
@@ -37,9 +37,9 @@ link_url = "https://www.respirework.com"
 # Post to Reddit
 try:
     submission = reddit.subreddit(selected_subreddit).submit(
-        title=selected_title,
-        url=link_url
-    )
+    title=selected_title,
+    selftext="Discover this epic fantasy book featuring dragons and rebellion: https://www.respirework.com"
+)
     print(f"✅ Successfully posted to r/{selected_subreddit}: {submission.permalink}")
 except Exception as e:
     print(f"❌ Failed to post: {e}")
