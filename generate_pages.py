@@ -3,10 +3,7 @@ from datetime import datetime, timezone
 
 # Paths
 LOCATIONS_FILE = "locations.txt"
-OUTPUT_DIR = "generate_pages"
-
-# Create output directory if it doesn't exist
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+OUTPUT_DIR = "."  # Generate in root
 
 # Get today's date in UTC
 today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
@@ -22,9 +19,9 @@ with open(LOCATIONS_FILE, "r") as f:
         country, city = parts
         locations.append((country.strip(), city.strip()))
 
-# Generate HTML pages
+# Generate HTML pages in the root directory
 for country, city in locations:
-    filename = f"{country.lower()}_{city.lower().replace(' ', '_')}.html"
+    filename = f"{city.lower().replace(' ', '_')}_{country.lower().replace(' ', '_')}.html"
     filepath = os.path.join(OUTPUT_DIR, filename)
     
     html = f"""<!DOCTYPE html>
