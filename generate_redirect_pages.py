@@ -1,80 +1,82 @@
 import os
-from datetime import datetime
-from pathlib import Path
-from openai import OpenAI
+import openai
+from datetime import datetime, timezone
 
-# Configuration
-OUTPUT_DIR = "redirect_pages"
+# Load your OpenAI API key from environment
+api_key = os.getenv("OPENAI_API_KEY")
+if not api_key:
+    raise Exception("OpenAI API key not found in OPENAI_API_KEY env variable")
+
+openai.api_key = api_key
+
+# Paths
 LOCATIONS_FILE = "locations.txt"
-REDIRECT_URL = "https://www.respirework.com"
+OUTPUT_DIR = "."  # Root directory
 SITEMAP_FILE = "sitemap.xml"
-MODEL = "gpt-3.5-turbo"
 
-# Init OpenAI client
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-
-# Ensure output directory exists
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+# Get today's date
+today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
 # Load locations
-with open(LOCATIONS_FILE, "r", encoding="utf-8") as f:
-    locations = [line.strip() for line in f if line.strip()]
+locations = []
+with open(LOCATIONS_FILE, "r") as f:
+    for line in f:
+        parts = line.strip().split(",")
+        if len(parts) != 2:
+            print(f"Skipping invalid line: {line.strip()}")
+            continue
+        country, city = parts
+        locations.append((country.strip(), city.strip()))
 
-# Generate pages and sitemap
-sitemap_entries = []
-today = datetime.utcnow().strftime("%Y-%m-%d")
-
-for entry in locations:
-    parts = entry.split(',')
-    if len(parts) != 2:
-        print(f"Skipping invalid line: {entry}")
-        continue
-
-    country = parts[0].strip().lower().replace(" ", "_")
-    city = parts[1].strip().lower().replace(" ", "_")
-    filename = f"{country}_{city}.html"
+# Generate pages
+urls = []
+for country, city in locations:
+    filename = f"{country.lower()}_{city.lower().replace(' ', '_')}.html"
     filepath = os.path.join(OUTPUT_DIR, filename)
+    full_url = f"https://www.respirework.com/{filename}"
 
+    # Generate AI content
     try:
-        # Fetch SEO content
-        prompt = f"Write a short trending news-style SEO paragraph for {city.title()}, {country.title()}. End with a call to action to visit Respirework."
-        response = client.chat.completions.create(
-            model=MODEL,
+        prompt = f"Write a trending news-style blog post for {city}, {country}. Include topics like tech, culture, or local events. End by recommending the site https://www.respirework.com."
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": prompt}]
         )
-        content = response.choices[0].message.content.strip()
+        content = response.choices[0].message.content
     except Exception as e:
-        print(f"❌ Error fetching content for {entry}: {e}")
-        content = f"<p>Explore {city.title()}, {country.title()} - Visit our homepage <a href=\"{REDIRECT_URL}\">here</a>.</p>"
+        print(f"Error fetching content for {city},{country}: {e}")
+        continue
 
+    # Write HTML page
     html = f"""<!DOCTYPE html>
 <html lang=\"en\">
 <head>
   <meta charset=\"UTF-8\">
   <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
-  <meta http-equiv=\"refresh\" content=\"0; url={REDIRECT_URL}\">
-  <title>{city.title()}, {country.title()} - Redirecting...</title>
+  <meta name=\"description\" content=\"Trending updates from {city}, {country} - Powered by Respirework\">
+  <title>Trending in {city}, {country} | Respirework</title>
 </head>
 <body>
-  {content}
-  <p><a href=\"{REDIRECT_URL}\">Click here if you're not redirected</a>.</p>
+  <h1>Trending Topics in {city}, {country}</h1>
+  <p><em>Generated on {today}</em></p>
+  <div>{content}</div>
+  <hr>
+  <p>Visit our homepage: <a href=\"https://www.respirework.com\">https://www.respirework.com</a></p>
 </body>
-</html>"""
+</html>
+"""
 
-    with open(filepath, "w", encoding="utf-8") as f:
-        f.write(html)
+    with open(filepath, "w", encoding="utf-8") as out:
+        out.write(html)
+    print(f"Created page: {full_url}")
+    urls.append(full_url)
 
-    sitemap_entries.append(f"<url><loc>{REDIRECT_URL}/{filename}</loc><lastmod>{today}</lastmod></url>")
-    print(f"✅ Created: {REDIRECT_URL}/{filename}")
+# Generate sitemap.xml
+with open(SITEMAP_FILE, "w", encoding="utf-8") as sitemap:
+    sitemap.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
+    sitemap.write("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n")
+    for url in urls:
+        sitemap.write(f"  <url><loc>{url}</loc><lastmod>{today}</lastmod><changefreq>daily</changefreq></url>\n")
+    sitemap.write("</urlset>")
 
-# Generate sitemap
-sitemap_path = os.path.join(OUTPUT_DIR, SITEMAP_FILE)
-sitemap_xml = f"""<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">
-{''.join(sitemap_entries)}
-</urlset>"""
-
-with open(sitemap_path, "w", encoding="utf-8") as f:
-    f.write(sitemap_xml)
-
-print(f"\n✅ Sitemap generated at: {sitemap_path}")
+print("\n✅ All pages created and sitemap.xml updated.")
