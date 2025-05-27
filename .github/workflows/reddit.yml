@@ -1,0 +1,13 @@
+name: Reddit Monitor
+on:
+  schedule:
+    - cron: '*/30 * * * *'  # Every 30 mins
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          pip install praw
+          python3 reddit_bot.py
