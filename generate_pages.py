@@ -2,7 +2,7 @@ import os
 from datetime import datetime, timezone
 
 # Paths
-LOCATIONS_FILE = "onyx-ebook-site/locations.txt"
+LOCATIONS_FILE = "locations.txt"
 OUTPUT_DIR = "generated_pages"
 
 # Create output directory if it doesn't exist
