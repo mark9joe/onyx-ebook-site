@@ -1,57 +1,72 @@
-import os from datetime import datetime, timezone from openai import OpenAI
+import os
+import openai
+from datetime import datetime
 
-Step 1: Load your OpenAI API key
+# Load OpenAI Key from environment
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
-api_key = os.getenv("OPENAI_API_KEY") if not api_key: raise Exception("OPENAI_API_KEY environment variable is not set.")
+# Create output directory if it doesn't exist
+OUTPUT_DIR = "."
+SITEMAP_FILE = "sitemap.xml"
+BASE_URL = "https://www.respirework.com"
 
-client = OpenAI(api_key=api_key)
+def load_list(file_path):
+    with open(file_path, "r") as f:
+        return [line.strip() for line in f if line.strip()]
 
-Step 2: Define paths and data
+locations = load_list("locations.txt")  # Format: country,city
+topics = load_list("topics.txt")        # Format: one topic per line
 
-LOCATIONS_FILE = "locations.txt" OUTPUT_DIR = "docs"  # GitHub Pages uses 'docs' directory os.makedirs(OUTPUT_DIR, exist_ok=True)
+urls = []
 
-Step 3: Load locations
+for loc in locations:
+    country, city = map(str.strip, loc.split(","))
+    for topic in topics:
+        slug = f"{topic.lower()}_{country.lower()}_{city.lower().replace(' ', '_')}"
+        filename = f"{slug}.html"
+        path = os.path.join(OUTPUT_DIR, filename)
 
-def load_locations(file): locations = [] with open(file, "r", encoding="utf-8") as f: for line in f: parts = line.strip().split(",") if len(parts) != 2: continue locations.append((parts[0].strip(), parts[1].strip())) return locations
+        try:
+            response = openai.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[{
+                    "role": "user",
+                    "content": f"Write 3 SEO paragraphs about '{topic}' in {city}, {country}. End with a CTA to visit https://www.respirework.com."
+                }],
+                max_tokens=500
+            )
+            content = response.choices[0].message.content.strip()
+        except Exception as e:
+            print(f"❌ Error fetching content for {country},{city}: {e}")
+            continue
 
-locations = load_locations(LOCATIONS_FILE)
-
-Step 4: Generate pages
-
-for country, city in locations: slug = f"{country.lower().replace(' ', '')}{city.lower().replace(' ', '_')}" filename = f"{slug}.html" filepath = os.path.join(OUTPUT_DIR, filename)
-
-try:
-    # Step 5: Generate content using GPT-3.5
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": "You are an SEO expert writing content for a local landing page."},
-            {"role": "user", "content": f"Write SEO content for {city}, {country}. Mention Respirework.com and add some trending topics."}
-        ]
-    )
-    content = response.choices[0].message.content.strip()
-
-    # Step 6: Build the HTML
-    html = f"""<!DOCTYPE html>
-
-<html lang=\"en\">
+        html = f"""<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset=\"UTF-8\">
-    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
-    <title>{city}, {country} | Respirework</title>
-    <meta name=\"description\" content=\"Explore content from {city}, {country} with Respirework.com\">
+  <meta charset="UTF-8">
+  <title>{topic.title()} in {city}, {country}</title>
+  <meta name="description" content="Discover {topic} updates from {city}, {country}.">
+  <meta http-equiv="refresh" content="5; URL={BASE_URL}">
 </head>
 <body>
-    <h1>{city}, {country} - Local Insights</h1>
-    <div>{content}</div>
-    <p>Visit our homepage: <a href=\"https://www.respirework.com\">Respirework</a></p>
-    <script>setTimeout(() => window.location.href = 'https://www.respirework.com', 10000);</script>
+  <h1>{topic.title()} in {city}, {country}</h1>
+  <p>{content}</p>
+  <p>Redirecting to <a href="{BASE_URL}">{BASE_URL}</a>...</p>
 </body>
-</html>"""with open(filepath, "w", encoding="utf-8") as f:
-        f.write(html)
+</html>"""
 
-    print(f"✅ Created: https://www.respirework.com/{filename}")
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(html)
 
-except Exception as e:
-    print(f"❌ Error generating content for {city}, {country}: {e}")
+        urls.append(f"{BASE_URL}/{filename}")
+        print(f"✅ Created page: {BASE_URL}/{filename}")
 
+# Update sitemap.xml
+with open(SITEMAP_FILE, "w") as f:
+    f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+    f.write('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n')
+    for url in urls:
+        f.write(f"<url><loc>{url}</loc><lastmod>{datetime.utcnow().date()}</lastmod></url>\n")
+    f.write('</urlset>\n')
+
+print("✅ Sitemap updated.")
