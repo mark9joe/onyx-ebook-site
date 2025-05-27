@@ -21,7 +21,7 @@ jobs:
           python-version: '3.x'
 
       - name: Run Generator
-         run: python generate_pages.py
+         run: generate_pages.py
 
       - name: Commit & Push
         run: |
