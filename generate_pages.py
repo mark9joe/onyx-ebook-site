@@ -1,44 +1,50 @@
-import os
-from datetime import datetime, timezone
+import os from datetime import datetime, timezone
+
+Input file with list of locations
 
 LOCATIONS_FILE = "locations.txt"
-OUTPUT_DIR = "."  # Save in repo root
 
-# Get today’s UTC date
+Where to generate the HTML files (root of repo)
+
+OUTPUT_DIR = "."
+
+Base website URL
+
+BASE_URL = "https://www.respirework.com"
+
+Get current UTC date
+
 today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
-# Load locations
-locations = []
-with open(LOCATIONS_FILE, "r") as f:
-    for line in f:
-        parts = line.strip().split(",")
-        if len(parts) != 2:
-            print(f"⚠️ Skipping invalid line: {line.strip()}")
-            continue
-        country, city = parts
-        locations.append((country.strip(), city.strip()))
+Read and parse locations
 
-# Generate redirect HTML pages in root
-for country, city in locations:
-    filename = f"{country.lower()}_{city.lower().replace(' ', '_')}.html"
-    filepath = os.path.join(OUTPUT_DIR, filename)
+locations = [] with open(LOCATIONS_FILE, "r") as f: for line in f: parts = line.strip().split(",") if len(parts) != 2: print(f"⚠️ Skipping invalid line: {line.strip()}") continue country, city = parts locations.append((country.strip(), city.strip()))
 
-    redirect_url = "https://www.respirework.com"
-    html = f"""<!DOCTYPE html>
-<html lang="en">
+Generate redirect pages
+
+sitemap_entries = [] for country, city in locations: filename = f"{country.lower()}{city.lower().replace(' ', '')}.html" filepath = os.path.join(OUTPUT_DIR, filename)
+
+redirect_html = f"""<!DOCTYPE html>
+
+<html lang=\"en\">
   <head>
-    <meta http-equiv="refresh" content="0; url={redirect_url}" />
-    <meta name="robots" content="noindex, nofollow" />
+    <meta http-equiv=\"refresh\" content=\"0; url={BASE_URL}\" />
+    <meta name=\"robots\" content=\"noindex, nofollow\" />
     <title>Redirecting...</title>
   </head>
   <body>
-    <p>If you are not redirected, <a href="{redirect_url}">click here</a>.</p>
+    <p>Redirecting to <a href=\"{BASE_URL}\">{BASE_URL}</a>...</p>
   </body>
 </html>
 """
-    with open(filepath, "w", encoding="utf-8") as out:
-        out.write(html)
+    with open(filepath, "w", encoding="utf-8") as f:
+        f.write(redirect_html)print(f"✅ Created page: {BASE_URL}/{filename}")
+sitemap_entries.append(f"{BASE_URL}/{filename}")
 
-    print(f"✅ Created page: https://www.respirework.com/{filename}")
+Optional: Save to sitemap file
 
-print(f"\n✅ Done. Total pages created: {len(locations)}")
+sitemap_path = os.path.join(OUTPUT_DIR, "sitemap.txt") with open(sitemap_path, "w", encoding="utf-8") as f: f.write("\n".join(sitemap_entries))
+
+print(f"\n✅ All {len(locations)} pages redirect to {BASE_URL}") print(f"Sitemap saved to: {sitemap_path}")
+
+                                                                 
