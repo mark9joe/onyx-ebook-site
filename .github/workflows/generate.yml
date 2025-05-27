@@ -12,21 +12,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: List files recursively
-        run: ls -R
+      - name: List repo contents (debug)
+        run: ls -laR
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
-      - name: Run Generator
+      - name: Run Page Generator
         run: python generate_pages.py
 
-      - name: Commit & Push
+      - name: Commit & Push (only if there are changes)
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add .
-          git commit -m "Generated next batch" || echo "No changes to commit"
-          git push || echo "Nothing to push"
+          git add *.html
+          git diff --cached --quiet || (git commit -m "Generated/Updated pages" && git push)
