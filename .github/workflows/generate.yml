@@ -19,8 +19,7 @@ jobs:
           python-version: "3.x"
 
       - name: Run generate_redirect_pages.py
-        run: |
-          python generate_redirect_pages.py
+        run:  python generate_redirect_pages.py
 
       - name: Commit & Push changes
         run: |
