@@ -2,7 +2,7 @@ name: Generate Pages
 
 on:
   schedule:
-    - cron: "*/5 * * * *"  # Every 5 minutes (adjustable)
+    - cron: "*/1 * * * *"  # Every minute
   workflow_dispatch:
 
 jobs:
@@ -11,6 +11,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: List files (debug)
+        run: ls -R
 
       - name: Set up Python
         uses: actions/setup-python@v4
