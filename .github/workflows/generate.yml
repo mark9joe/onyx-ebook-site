@@ -12,8 +12,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: List files (debug)
-        run: ls -R
+      - name: List files recursively
+         run: ls -R
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -21,7 +21,7 @@ jobs:
           python-version: '3.x'
 
       - name: Run Generator
-        run: python generated_pages.py
+        run: python onyx-ebook-site/generated_pages.py
 
       - name: Commit & Push
         run: |
