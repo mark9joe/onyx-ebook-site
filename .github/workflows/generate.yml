@@ -2,33 +2,23 @@ name: Generate Redirect Pages
 
 on:
   schedule:
-    - cron: "*/1 * * * *"  # Every minute
+    - cron: '*/5 * * * *'
   workflow_dispatch:
 
 jobs:
-  generate:
+  build:
     runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v3
-
+      - uses: actions/checkout@v3
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.11'
 
-      - name: Install OpenAI
-        run: pip install openai==1.3.9
+      - name: Install dependencies
+        run: pip install openai
 
-      - name: Generate Pages
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      - name: Run generator
         run: python generate_redirect_pages.py
-
-      - name: Commit and Push
-        run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
-          git add .
-          git commit -m "Auto-generated redirect pages"
-          git push
