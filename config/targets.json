@@ -1,0 +1,15 @@
+{
+  "website": "https://respirework.com",
+  "competitors": [
+    "https://competitor1.com/blog/seo-guide",
+    "https://competitor2.com/content-marketing"
+  ],
+  "wikipedia": [
+    "Search_engine_optimization",
+    "Content_marketing"
+  ],
+  "reddit": {
+    "subreddits": ["SEO", "DigitalMarketing"],
+    "keywords": ["best SEO tools", "content marketing tips"]
+  }
+}
