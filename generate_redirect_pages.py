@@ -2,13 +2,14 @@ import os
 from datetime import datetime, timezone
 
 # Config
-LOCATIONS_FILE = "locations.txt"  # format: Country,City per line
-TOPICS_FILE = "topics.txt"        # one topic per line, e.g. google, facebook, youtube
-OUTPUT_DIR = "redirect_pages"     # output folder
+LOCATIONS_FILE = "locations.txt"
+TOPICS_FILE = "topics.txt"
+OUTPUT_DIR = ""  # empty string means root folder for your website files
 REDIRECT_URL = "https://www.respirework.com"
 
-# Create output directory
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+# Make output directory if specified
+if OUTPUT_DIR:
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # Load locations
 locations = []
@@ -28,17 +29,14 @@ with open(TOPICS_FILE, "r", encoding="utf-8") as topics_file:
         if topic:
             topics.append(topic)
 
-# Current UTC date for logs (optional)
-today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-
 count = 0
 for country, city in locations:
     safe_country = country.lower().replace(" ", "_")
     safe_city = city.lower().replace(" ", "_")
     for topic in topics:
-        filename = f"{topic}_{safe_country}_{safe_city}.html"
-        filepath = os.path.join(OUTPUT_DIR, filename)
-        # Redirect HTML content
+        filename = f"{topic}_{safe_city}_{safe_country}.html"
+        filepath = os.path.join(OUTPUT_DIR, filename) if OUTPUT_DIR else filename
+
         html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,7 +53,7 @@ for country, city in locations:
 """
         with open(filepath, "w", encoding="utf-8") as f:
             f.write(html)
-        print(f"✅ Created redirect page: {filepath}")
+        print(f"✅ Created redirect page: https://www.respirework.com/{filename}")
         count += 1
 
 print(f"\n✅ Done. Total redirect pages created: {count}")
