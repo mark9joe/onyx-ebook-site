@@ -7,7 +7,7 @@ api_key = os.getenv("OPENAI_API_KEY")
 if not api_key:
     raise Exception("OpenAI API key not found in OPENAI_API_KEY env variable")
 
-openai.api_key = api_key
+client = openai.OpenAI(api_key=api_key)
 
 # File paths
 LOCATIONS_FILE = "locations.txt"
@@ -34,14 +34,14 @@ for entry in locations:
     # AI content
     topic = f"latest trending news, events, and culture from {city}, {country}"
     try:
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-4",
             messages=[
                 {"role": "system", "content": "You are a helpful content writer."},
                 {"role": "user", "content": f"Write an SEO-optimized 150-word intro about {topic}."}
             ]
         )
-        content = response["choices"][0]["message"]["content"]
+        content = response.choices[0].message.content
     except Exception as e:
         print(f"❌ Error fetching content for {entry}: {e}")
         continue
