@@ -1,36 +1,29 @@
-name: Generate 100K Pages
+name: Generate 100k Pages Every Minute
 
 on:
   schedule:
-    - cron: "*/1 * * * *"  # every 1 minute
+    - cron: "* * * * *"  # Every minute
   workflow_dispatch:
 
 jobs:
   generate:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repo
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.x'
 
-      - name: Install Requirements
-        run: |
-          pip install -r requirements.txt
+      - name: Run page generator
+        run: python generated_pages.py
 
-      - name: Generate HTML Pages
+      - name: Commit & Push changes
         run: |
-          mkdir -p public/pages
-          python generate_pages.py
-
-      - name: Commit Generated Pages
-        run: |
-          git config user.name "GitHub Action"
-          git config user.email "action@github.com"
-          git add public/pages/
-          git commit -m "✅ Generated 100K pages" || echo "No changes to commit"
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Generated next 100k pages"
           git push
