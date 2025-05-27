@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 
 # Paths
 LOCATIONS_FILE = "locations.txt"
-OUTPUT_DIR = "generated_pages"
+OUTPUT_DIR = "generate_pages"
 
 # Create output directory if it doesn't exist
 os.makedirs(OUTPUT_DIR, exist_ok=True)
