@@ -1,59 +1,45 @@
-import os
-import openai
+import os import openai from datetime import datetime
 
-# Get your OpenAI API key from environment variable
-openai.api_key = os.getenv("OPENAI_API_KEY")
-if not openai.api_key:
-    raise Exception("OpenAI API key not found in OPENAI_API_KEY environment variable")
-
-# List of locations you want pages for (change or load from your file)
-locations = [
-    ("Ireland", "Dublin"),
-    ("USA", "New York"),
-    ("UK", "London"),
-]
-
-OUTPUT_DIR = "redirect_pages"
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+Set your homepage URL
 
 homepage_url = "https://www.respirework.com"
 
-for country, city in locations:
-    filename = f"{country.lower()}_{city.lower().replace(' ', '_')}.html"
-    filepath = os.path.join(OUTPUT_DIR, filename)
+Set OpenAI API key from environment variable
 
-    prompt = f"Write a short SEO-friendly introduction about news and events in {city}, {country}. Also promote the website {homepage_url}."
+openai.api_key = os.getenv("OPENAI_API_KEY") if not openai.api_key: raise Exception("OpenAI API key not found in OPENAI_API_KEY environment variable")
 
-    try:
-        response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=prompt,
-            max_tokens=150,
-            temperature=0.7,
-        )
-        content = response.choices[0].text.strip()
-    except Exception as e:
-        content = f"Sorry, content could not be generated. Error: {e}"
+Define the list of (country, city)
 
-    html = f"""<!DOCTYPE html>
-<html lang="en">
+locations = [ ("Ireland", "Dublin"), ("USA", "New York"), ("UK", "London"), ("Germany", "Berlin") ]
+
+Output directory is the root of the repo
+
+OUTPUT_DIR = "."
+
+def generate_html(city, country, content): return f"""<!DOCTYPE html>
+
+<html lang=\"en\">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset=\"UTF-8\">
+  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
   <title>{city}, {country} | Respirework</title>
-  <meta http-equiv="refresh" content="10; url={homepage_url}" />
+  <meta http-equiv=\"refresh\" content=\"10; url={homepage_url}\">
 </head>
 <body>
-  <h1>News and updates from {city}, {country}</h1>
+  <h1>Welcome from {city}, {country}!</h1>
   <p>{content}</p>
-  <p>If you are not redirected automatically, <a href="{homepage_url}">click here to visit Respirework</a>.</p>
+  <p>If you're not redirected automatically, <a href=\"{homepage_url}\">click here</a>.</p>
 </body>
-</html>
-"""
+</html>"""Loop through each location and create a page
 
-    with open(filepath, "w", encoding="utf-8") as f:
-        f.write(html)
+for country, city in locations: prompt = f"Write a short paragraph promoting the website {homepage_url} for visitors from {city}, {country}." try: response = openai.Completion.create( engine="text-davinci-003", prompt=prompt, max_tokens=150, temperature=0.7 ) content = response.choices[0].text.strip() except Exception as e: content = f"Content could not be loaded due to an error: {e}"
 
-    print(f"✅ Created redirect page: {filepath}")
+filename = f"{country.lower()}_{city.lower().replace(' ', '_')}.html"
+filepath = os.path.join(OUTPUT_DIR, filename)
+with open(filepath, "w", encoding="utf-8") as f:
+    f.write(generate_html(city, country, content))
 
-print("\n✅ All pages generated successfully.")
+print(f"✅ Created page: {homepage_url}/{filename}")
+
+print("\nAll pages generated successfully.")
+
