@@ -1,34 +1,34 @@
-name: Generate SEO Pages
+name: Generate Redirect Pages
 
 on:
   schedule:
-    - cron: '*/5 * * * *'  # every 5 minutes
+    - cron: "*/1 * * * *"  # Every minute
   workflow_dispatch:
 
 jobs:
-  generate-pages:
+  generate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: Checkout Repo
         uses: actions/checkout@v3
 
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: '3.10'
 
-      - name: Install OpenAI SDK
-        run: pip install openai
+      - name: Install OpenAI
+        run: pip install openai==1.3.9
 
-      - name: Run Generator Script
+      - name: Generate Pages
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: python generate_redirect_pages.py
 
       - name: Commit and Push
         run: |
-          git config user.name github-actions
-          git config user.email actions@github.com
-          git add docs/
-          git commit -m "Generated SEO pages" || echo "No changes"
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Auto-generated redirect pages"
           git push
