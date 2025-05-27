@@ -1,4 +1,4 @@
-name: Generate Redirect Pages
+name: Generate AI Redirect Pages
 
 on:
   schedule:
@@ -8,24 +8,30 @@ on:
 jobs:
   generate:
     runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}  # Make sure you add this secret in your repo settings
 
     steps:
-      - name: Checkout repo
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Python 3.x
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.x"
+          python-version: '3.x'
 
-      - name: Run generate_redirect_pages.py
-        run:  python generate_redirect_pages.py
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install openai
+
+      - name: Run AI Page Generator
+        run: python generate_redirect_pages.py
 
       - name: Commit & Push changes
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add generated_pages/
-          git commit -m "Auto-generated redirect pages & sitemap"
+          git add .
+          git diff --cached --quiet || git commit -m "Generated AI content pages"
           git push
-        continue-on-error: true
