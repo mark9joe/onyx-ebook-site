@@ -15,25 +15,23 @@ def slugify(text):
 
 def generate_content(topic, location):
     country, city = location.split(",")
-    return f"""
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{topic} News in {city}, {country}</title>
-        <meta name="description" content="Latest updates about {topic} in {city}, {country}. Stay informed with RespireWork.">
-        <meta name="keywords" content="{topic}, {city}, {country}, news, trends">
-        <meta http-equiv="refresh" content="0; url=https://www.respirework.com">
-    </head>
-    <body>
-        <h1>Redirecting to RespireWork...</h1>
-        <p>If not redirected, <a href="https://www.respirework.com">click here</a>.</p>
-    </body>
-    </html>
-    """
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{topic} News in {city}, {country}</title>
+  <meta name="description" content="Latest updates about {topic} in {city}, {country}. Stay informed with RespireWork.">
+  <meta name="keywords" content="{topic}, {city}, {country}, news, trends">
+  <meta http-equiv="refresh" content="0; url=https://www.respirework.com">
+</head>
+<body>
+  <h1>Redirecting to RespireWork...</h1>
+  <p>If not redirected, <a href="https://www.respirework.com">click here</a>.</p>
+</body>
+</html>
+"""
 
-# Choose a random topic/location each time to keep unique
 topic = random.choice(topics)
 location = random.choice(locations)
 filename = f"{slugify(topic)}_{slugify(location)}.html"
@@ -42,7 +40,7 @@ filepath = os.path.join("pages", filename)
 with open(filepath, "w") as f:
     f.write(generate_content(topic, location))
 
-# Generate or update sitemap
+# Update sitemap
 with open("sitemap.xml", "w") as f:
     f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
     f.write('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n')
