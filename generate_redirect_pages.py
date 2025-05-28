@@ -1,96 +1,81 @@
 import os
-import time
-from datetime import datetime
+from datetime import datetime, timezone
+from xml.etree.ElementTree import Element, SubElement, tostring
+import xml.dom.minidom
+import urllib.parse
+import urllib.request
 
-# File paths
-LOCATIONS_FILE = "locations.txt"
-TOPICS_FILE = "topics.txt"
-OUTPUT_DIR = "generated_pages"
-SITEMAP_FILE = "sitemap.xml"
-RSS_FILE = "feed.xml"
+# Configuration
+output_dir = "generated_pages"
+site_url = "https://www.respirework.com"
+os.makedirs(output_dir, exist_ok=True)
 
-# Ensure output directory exists
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+# Load topics and locations
+with open("locations.txt", "r", encoding="utf-8") as f:
+    locations = [line.strip() for line in f if line.strip()]
 
-def get_locations():
-    with open(LOCATIONS_FILE, "r") as f:
-        return [line.strip() for line in f.readlines() if line.strip()]
+with open("topics.txt", "r", encoding="utf-8") as f:
+    topics = [line.strip() for line in f if line.strip()]
 
-def get_topics():
-    with open(TOPICS_FILE, "r") as f:
-        return [line.strip() for line in f.readlines() if line.strip()]
+# Page generation
+for location in locations:
+    for topic in topics:
+        filename = f"{topic.lower()}_{location.lower().replace(',', '').replace(' ', '_')}.html"
+        filepath = os.path.join(output_dir, filename)
 
-def generate_content(topic, location):
-    # Static placeholder content generation
-    return {
-        "title": f"Latest {topic.title()} Trends in {location.title()}",
-        "description": f"Discover the most recent updates on {topic} in {location}.",
-        "body": f"<p>Stay informed with trending {topic.lower()} news and events in {location}.</p>"
-    }
+        title = f"{topic.title()} News in {location.title()} - RespireWork"
+        description = f"Explore trending {topic} news and insights from {location}, powered by AI."
 
-def write_html_file(filename, title, description, body):
-    full_path = os.path.join(OUTPUT_DIR, filename)
-    with open(full_path, "w", encoding="utf-8") as f:
-        f.write(f"""
-<!DOCTYPE html>
-<html lang=\"en\">
-<head>
-    <meta charset=\"UTF-8\">
-    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
-    <meta name=\"description\" content=\"{description}\">
-    <title>{title}</title>
-</head>
-<body>
-    <h1>{title}</h1>
-    {body}
-    <hr>
-    <p>Visit our homepage: <a href=\"https://www.respirework.com\">https://www.respirework.com</a></p>
-</body>
-</html>
-        ")
-    print(f"Created page: https://www.respirework.com/{filename}")
-    return filename
+        content = f"""
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta name="description" content="{description}">
+            <meta name="robots" content="index, follow">
+            <title>{title}</title>
+        </head>
+        <body>
+            <h1>{title}</h1>
+            <p>{description}</p>
+            <p>Visit our homepage for more: <a href="{site_url}">{site_url}</a></p>
+        </body>
+        </html>
+        """
 
-def generate_sitemap(urls):
-    with open(SITEMAP_FILE, "w", encoding="utf-8") as f:
-        f.write("""<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">
-""")
-        for url in urls:
-            f.write(f"  <url>\n    <loc>https://www.respirework.com/{url}</loc>\n    <lastmod>{datetime.utcnow().isoformat()}Z</lastmod>\n  </url>\n")
-        f.write("</urlset>")
-    print("✅ Sitemap generated")
+        with open(filepath, "w", encoding="utf-8") as f:
+            f.write(content)
+        print(f"✅ Created page: {site_url}/{filename}")
 
-def generate_rss(urls):
-    with open(RSS_FILE, "w", encoding="utf-8") as f:
-        f.write("""<?xml version=\"1.0\" encoding=\"UTF-8\" ?>
-<rss version=\"2.0\">
-<channel>
-  <title>RespireWork AI Content</title>
-  <link>https://www.respirework.com</link>
-  <description>AI generated content by location and topic</description>
-""")
-        for url in urls:
-            f.write(f"  <item>\n    <title>{url.replace('.html','')}</title>\n    <link>https://www.respirework.com/{url}</link>\n    <guid>https://www.respirework.com/{url}</guid>\n    <pubDate>{datetime.utcnow().strftime('%a, %d %b %Y %H:%M:%S +0000')}</pubDate>\n  </item>\n")
-        f.write("</channel>\n</rss>")
-    print("✅ RSS feed generated")
+# Generate sitemap.xml
+sitemap_root = Element("urlset")
+sitemap_root.set("xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9")
 
-def main():
-    locations = get_locations()
-    topics = get_topics()
-    generated_urls = []
+for file in os.listdir(output_dir):
+    if file.endswith(".html"):
+        url = SubElement(sitemap_root, "url")
+        loc = SubElement(url, "loc")
+        loc.text = f"{site_url}/{file}"
+        lastmod = SubElement(url, "lastmod")
+        lastmod.text = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
-    for location in locations:
-        for topic in topics:
-            filename = f"{topic.lower().replace(' ','_')}_{location.lower().replace(',','').replace(' ','_')}.html"
-            content = generate_content(topic, location)
-            write_html_file(filename, content["title"], content["description"], content["body"])
-            generated_urls.append(filename)
-            time.sleep(1)  # Be polite
+sitemap_str = xml.dom.minidom.parseString(tostring(sitemap_root)).toprettyxml(indent="  ")
+with open("sitemap.xml", "w", encoding="utf-8") as f:
+    f.write(sitemap_str)
+print("🗺️ Sitemap generated: sitemap.xml")
 
-    generate_sitemap(generated_urls)
-    generate_rss(generated_urls)
+# Ping search engines
+sitemap_url = f"{site_url}/sitemap.xml"
+ping_urls = [
+    f"http://www.google.com/ping?sitemap={urllib.parse.quote(sitemap_url)}",
+    f"http://www.bing.com/ping?sitemap={urllib.parse.quote(sitemap_url)}"
+]
 
-if __name__ == "__main__":
-    main()
-    
+for url in ping_urls:
+    try:
+        response = urllib.request.urlopen(url)
+        print(f"📡 Pinged: {url} (Status: {response.status})")
+    except Exception as e:
+        print(f"❌ Error pinging {url}: {e}")
+        
