@@ -1,50 +1,38 @@
-name: Generate 100000000000000 Pages
+name: Generate SEO Pages
 
 on:
   schedule:
-    - cron: '*/1 * * * *'  # Run every 1 minute
+    - cron: '*/1 * * * *'  # Every 1 minutes
   workflow_dispatch:
 
-jobs: generate-pages: runs-on: ubuntu-latest
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-steps:
-  - name: Checkout repository
-    uses: actions/checkout@v3
-    with:
-      fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
 
-  - name: Set up Python
-    uses: actions/setup-python@v4
-    with:
-      python-version: '3.11'
+      - name: Install dependencies
+        run: pip install --upgrade pip
 
-  - name: Install dependencies
-    run: |
-      pip install -r requirements.txt || true
+      - name: Generate SEO pages
+        run: python generate_pages.py
 
-  - name: Generate pages
-    run: |
-      python generate_pages.py
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add pages/ sitemap.xml rss.xml || echo "Nothing to add"
+          git commit -m "Auto-generate SEO pages" || echo "Nothing to commit"
+          git pull --rebase
+          git push
 
-  - name: Configure Git
-    run: |
-      git config --global user.email "github-actions@users.noreply.github.com"
-      git config --global user.name "github-actions"
-
-  - name: Pull remote changes before pushing
-    run: |
-      git pull origin main --rebase || true
-
-  - name: Add and commit changes
-    run: |
-      git add pages/*.html sitemap.xml rss.xml || echo "Nothing to add"
-      git commit -m "Auto-generate SEO pages" || echo "Nothing to commit"
-
-  - name: Push changes
-    run: |
-      git push origin main || echo "Push failed"
-
-  - name: Ping Google and Bing with sitemap
-    run: |
-      curl -s "http://www.google.com/ping?sitemap=https://www.respirework.com/sitemap.xml"
-      curl -s "http://www.bing.com/ping?sitemap=https://www.respirework.com/sitemap.xml"
+      - name: Ping Google & Bing
+        run: |
+          curl "http://www.google.com/ping?sitemap=https://www.respirework.com/sitemap.xml" || echo "Google ping failed"
+          curl "http://www.bing.com/ping?sitemap=https://www.respirework.com/sitemap.xml" || echo "Bing ping failed"
