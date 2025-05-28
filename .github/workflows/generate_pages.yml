@@ -1,40 +1,47 @@
-from flask import Flask, render_template, redirect, Response
-import os
+name: Generate 100000000000000 Pages
 
-app = Flask(__name__)
+on: schedule: - cron: "*/1 * * * *"  # Every 1 minute workflow_dispatch:
 
-with open("locations.txt") as f:
-    LOCATIONS = [line.strip().replace(",", "").replace(" ", "").lower() for line in f.readlines()]
+jobs: generate-pages: runs-on: ubuntu-latest
 
-with open("topics.txt") as f:
-    TOPICS = [line.strip().replace(",", "").replace(" ", "").lower() for line in f.readlines()]
+steps:
+  - name: Checkout repository
+    uses: actions/checkout@v3
+    with:
+      fetch-depth: 0
 
-@app.route("/")
-def homepage():
-    return "Welcome to RespireWork.com"
+  - name: Set up Python
+    uses: actions/setup-python@v4
+    with:
+      python-version: '3.11'
 
-@app.route("/pages/<slug>.html")
-def seo_page(slug):
-    for loc in LOCATIONS:
-        for topic in TOPICS:
-            if slug == f"{topic}_{loc}":
-                title = f"Trending {topic.capitalize()} in {loc.capitalize()}"
-                description = f"Explore the latest on {topic} happening now in {loc.capitalize()} at RespireWork."
-                return render_template("page.html", title=title, description=description)
-    return redirect("https://www.respirework.com")
+  - name: Install dependencies
+    run: |
+      pip install -r requirements.txt || true
 
-@app.route("/sitemap.xml")
-def sitemap():
-    urls = []
-    for loc in LOCATIONS:
-        for topic in TOPICS:
-            slug = f"{topic}_{loc}"
-            urls.append(f"https://www.respirework.com/pages/{slug}.html")
-    xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-    for url in urls[:100000000000000]:
-        xml += f"  <url><loc>{url}</loc></url>\n"
-    xml += '</urlset>'
-    return Response(xml, mimetype='application/xml')
+  - name: Generate pages
+    run: |
+      python generate_pages.py
 
-if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+  - name: Configure Git
+    run: |
+      git config --global user.email "github-actions@users.noreply.github.com"
+      git config --global user.name "github-actions"
+
+  - name: Pull remote changes before pushing
+    run: |
+      git pull origin main --rebase || true
+
+  - name: Add and commit changes
+    run: |
+      git add pages/*.html sitemap.xml rss.xml || echo "Nothing to add"
+      git commit -m "Auto-generate SEO pages" || echo "Nothing to commit"
+
+  - name: Push changes
+    run: |
+      git push origin main || echo "Push failed"
+
+  - name: Ping Google and Bing with sitemap
+    run: |
+      curl -s "http://www.google.com/ping?sitemap=https://www.respirework.com/sitemap.xml"
+      curl -s "http://www.bing.com/ping?sitemap=https://www.respirework.com/sitemap.xml"
