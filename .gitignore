@@ -7,3 +7,34 @@ sitemap_index.xml
 rss_index.xml
 sitemap_*.xml 
 rss_*.xml
+# Ignore large XML files
+rss.xml
+sitemap.xml
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# VSCode settings (optional)
+.vscode/
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.*
+
+# Mac and system files
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.bak
+*.tmp
+
+# GitHub Pages cache or temp files
+_site/
