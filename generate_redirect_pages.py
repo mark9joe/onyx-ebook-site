@@ -2,55 +2,69 @@ import os
 import random
 from datetime import datetime
 
-os.makedirs("pages", exist_ok=True)
+BASE_URL = "https://www.respirework.com"
+OUTPUT_DIR = "pages"
+SITEMAP_FILE = "sitemap.xml"
+TOPIC_FILE = "topics.txt"
+LOCATION_FILE = "locations.txt"
 
-with open("topics.txt", "r") as f:
-    topics = [line.strip() for line in f if line.strip()]
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-with open("locations.txt", "r") as f:
-    locations = [line.strip() for line in f if line.strip()]
+def load_lines(filename):
+    with open(filename, "r") as f:
+        return [line.strip() for line in f if line.strip()]
 
-def slugify(text):
-    return text.lower().replace(",", "").replace(" ", "_")
+def generate_html(topic, location):
+    filename = f"{topic.lower()}_{location.lower().replace(',', '').replace(' ', '')}.html"
+    filepath = os.path.join(OUTPUT_DIR, filename)
+    full_url = f"{BASE_URL}/{filename}"
 
-def generate_content(topic, location):
-    country, city = location.split(",")
-    return f"""<!DOCTYPE html>
+    title = f"{topic.title()} News in {location.title()} - RespireWork"
+    description = f"Explore trending topics about {topic} in {location}. Visit RespireWork for more."
+
+    html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="robots" content="index, follow">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{topic} News in {city}, {country}</title>
-  <meta name="description" content="Latest updates about {topic} in {city}, {country}. Stay informed with RespireWork.">
-  <meta name="keywords" content="{topic}, {city}, {country}, news, trends">
-  <meta http-equiv="refresh" content="0; url=https://www.respirework.com">
+  <title>{title}</title>
+  <meta name="description" content="{description}">
+  <meta http-equiv="refresh" content="0;url={BASE_URL}">
 </head>
 <body>
-  <h1>Redirecting to RespireWork...</h1>
-  <p>If not redirected, <a href="https://www.respirework.com">click here</a>.</p>
+  <p>Redirecting to <a href="{BASE_URL}">{BASE_URL}</a></p>
 </body>
-</html>
-"""
+</html>"""
 
-topic = random.choice(topics)
-location = random.choice(locations)
-filename = f"{slugify(topic)}_{slugify(location)}.html"
-filepath = os.path.join("pages", filename)
+    with open(filepath, "w") as f:
+        f.write(html)
 
-with open(filepath, "w") as f:
-    f.write(generate_content(topic, location))
+    return filename, full_url
 
-# Update sitemap
-with open("sitemap.xml", "w") as f:
-    f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-    f.write('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n')
-    for file in os.listdir("pages"):
-        if file.endswith(".html"):
-            url = f"https://www.respirework.com/pages/{file}"
-            f.write(f"""  <url>
-    <loc>{url}</loc>
-    <lastmod>{datetime.utcnow().date()}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>\n""")
-    f.write('</urlset>')
+def update_sitemap(pages):
+    timestamp = datetime.utcnow().isoformat() + "Z"
+    sitemap_entries = "\n".join(
+        f"""<url><loc>{url}</loc><lastmod>{timestamp}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>"""
+        for _, url in pages
+    )
+    sitemap = f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{sitemap_entries}
+</urlset>"""
+    with open(SITEMAP_FILE, "w") as f:
+        f.write(sitemap)
+
+# MAIN
+topics = load_lines(TOPIC_FILE)
+locations = load_lines(LOCATION_FILE)
+pages_created = []
+
+for topic in topics:
+    for location in random.sample(locations, min(3, len(locations))):  # Limit to 3 locations per topic
+        filename, url = generate_html(topic, location)
+        pages_created.append((filename, url))
+
+update_sitemap(pages_created)
+
+print(f"✅ Generated {len(pages_created)} pages.")
