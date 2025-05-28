@@ -64,11 +64,13 @@ for location in locations:
 
         count += 1
 
-# Write sitemap
-with open("sitemap.xml", "w") as f:
-    f.write("""<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">
-" + "\n".join(sitemap_entries) + "\n</urlset>")
+# Write sitemap.xml
+with open("sitemap.xml", "w", encoding="utf-8") as f:
+    f.write("""<?xml version="1.0" encoding="UTF-8"?>\n""")
+    f.write("""<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n""")
+    for url in sitemap_urls:
+        f.write(f"""  <url><loc>{url}</loc></url>\n""")
+    f.write("""</urlset>""")
 
 # Write RSS feed
 with open("rss.xml", "w") as f:
