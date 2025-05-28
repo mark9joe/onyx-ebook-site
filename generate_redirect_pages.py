@@ -1,81 +1,65 @@
 import os
-from datetime import datetime, timezone
-from xml.etree.ElementTree import Element, SubElement, tostring
-import xml.dom.minidom
-import urllib.parse
-import urllib.request
+from datetime import datetime
 
-# Configuration
-output_dir = "generated_pages"
-site_url = "https://www.respirework.com"
-os.makedirs(output_dir, exist_ok=True)
+# File paths
+locations_file = "locations.txt"
+topics_file = "topics.txt"
+pages_dir = "pages"
+sitemap_file = "sitemap.xml"
 
-# Load topics and locations
-with open("locations.txt", "r", encoding="utf-8") as f:
-    locations = [line.strip() for line in f if line.strip()]
+# Base site URL
+base_url = "https://www.respirework.com"
 
-with open("topics.txt", "r", encoding="utf-8") as f:
-    topics = [line.strip() for line in f if line.strip()]
+# Ensure output directory exists
+os.makedirs(pages_dir, exist_ok=True)
+
+# Load locations and topics
+with open(locations_file, "r") as f:
+    locations = [line.strip().replace(",", "_").replace(" ", "_").lower() for line in f if line.strip()]
+
+with open(topics_file, "r") as f:
+    topics = [line.strip().replace(",", "_").replace(" ", "_").lower() for line in f if line.strip()]
 
 # Page generation
+generated_pages = []
 for location in locations:
     for topic in topics:
-        filename = f"{topic.lower()}_{location.lower().replace(',', '').replace(' ', '_')}.html"
-        filepath = os.path.join(output_dir, filename)
+        slug = f"{topic}_{location}"
+        page_filename = f"{pages_dir}/{slug}.html"
+        page_url = f"{base_url}/{slug}.html"
 
-        title = f"{topic.title()} News in {location.title()} - RespireWork"
-        description = f"Explore trending {topic} news and insights from {location}, powered by AI."
+        # HTML redirect content
+        html_content = f"""<!DOCTYPE html>
+<html lang=\"en\">
+<head>
+    <meta charset=\"UTF-8\">
+    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+    <title>{topic.replace('_', ' ').title()} - {location.replace('_', ' ').title()}</title>
+    <meta name=\"description\" content=\"Latest updates on {topic.replace('_', ' ')} in {location.replace('_', ' ')}. Stay informed with RespireWork.\">
+    <meta http-equiv=\"refresh\" content=\"0; url={base_url}\" />
+</head>
+<body>
+    <p>Redirecting to <a href=\"{base_url}\">{base_url}</a>...</p>
+</body>
+</html>"""
 
-        content = f"""
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <meta name="description" content="{description}">
-            <meta name="robots" content="index, follow">
-            <title>{title}</title>
-        </head>
-        <body>
-            <h1>{title}</h1>
-            <p>{description}</p>
-            <p>Visit our homepage for more: <a href="{site_url}">{site_url}</a></p>
-        </body>
-        </html>
-        """
+        with open(page_filename, "w") as f:
+            f.write(html_content)
+            generated_pages.append(f"{page_url}")
 
-        with open(filepath, "w", encoding="utf-8") as f:
-            f.write(content)
-        print(f"✅ Created page: {site_url}/{filename}")
+# Update sitemap
+sitemap_entries = "\n".join([f"  <url><loc>{url}</loc><lastmod>{datetime.utcnow().date()}</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>" for url in generated_pages])
+sitemap_content = f"""<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">
+{sitemap_entries}
+</urlset>"""
 
-# Generate sitemap.xml
-sitemap_root = Element("urlset")
-sitemap_root.set("xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9")
+with open(sitemap_file, "w") as f:
+    f.write(sitemap_content)
 
-for file in os.listdir(output_dir):
-    if file.endswith(".html"):
-        url = SubElement(sitemap_root, "url")
-        loc = SubElement(url, "loc")
-        loc.text = f"{site_url}/{file}"
-        lastmod = SubElement(url, "lastmod")
-        lastmod.text = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+print(f"Generated {len(generated_pages)} pages and updated sitemap.xml")
 
-sitemap_str = xml.dom.minidom.parseString(tostring(sitemap_root)).toprettyxml(indent="  ")
-with open("sitemap.xml", "w", encoding="utf-8") as f:
-    f.write(sitemap_str)
-print("🗺️ Sitemap generated: sitemap.xml")
-
-# Ping search engines
-sitemap_url = f"{site_url}/sitemap.xml"
-ping_urls = [
-    f"http://www.google.com/ping?sitemap={urllib.parse.quote(sitemap_url)}",
-    f"http://www.bing.com/ping?sitemap={urllib.parse.quote(sitemap_url)}"
-]
-
-for url in ping_urls:
-    try:
-        response = urllib.request.urlopen(url)
-        print(f"📡 Pinged: {url} (Status: {response.status})")
-    except Exception as e:
-        print(f"❌ Error pinging {url}: {e}")
-        
+# Optional RSS Ping (print ping URLs for manual or automated use)
+for url in generated_pages:
+    print(f"Ping this: https://www.google.com/ping?sitemap={base_url}/sitemap.xml")
+    
