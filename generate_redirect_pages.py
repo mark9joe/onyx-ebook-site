@@ -1,65 +1,65 @@
 import os
 from datetime import datetime
-
-# File paths
-locations_file = "locations.txt"
-topics_file = "topics.txt"
-pages_dir = "pages"
-sitemap_file = "sitemap.xml"
-
-# Base site URL
-base_url = "https://www.respirework.com"
-
-# Ensure output directory exists
-os.makedirs(pages_dir, exist_ok=True)
+from urllib.parse import quote
 
 # Load locations and topics
-with open(locations_file, "r") as f:
-    locations = [line.strip().replace(",", "_").replace(" ", "_").lower() for line in f if line.strip()]
+with open("locations.txt", "r") as f:
+    locations = [line.strip() for line in f if line.strip()]
 
-with open(topics_file, "r") as f:
-    topics = [line.strip().replace(",", "_").replace(" ", "_").lower() for line in f if line.strip()]
+with open("topics.txt", "r") as f:
+    topics = [line.strip() for line in f if line.strip()]
 
-# Page generation
-generated_pages = []
+# Directory to save generated HTML files
+output_dir = "pages"
+os.makedirs(output_dir, exist_ok=True)
+
+# Store sitemap entries
+sitemap_entries = []
+
+# Homepage URL
+base_url = "https://www.respirework.com"
+
 for location in locations:
     for topic in topics:
-        slug = f"{topic}_{location}"
-        page_filename = f"{pages_dir}/{slug}.html"
-        page_url = f"{base_url}/{slug}.html"
+        safe_location = location.lower().replace(",", "").replace(" ", "_")
+        safe_topic = topic.lower().replace(" ", "_")
+        filename = f"{safe_topic}_{safe_location}.html"
+        filepath = os.path.join(output_dir, filename)
+        full_url = f"{base_url}/{filename}"
 
-        # HTML redirect content
-        html_content = f"""<!DOCTYPE html>
-<html lang=\"en\">
+        # Create redirect HTML content
+        with open(filepath, "w", encoding="utf-8") as f:
+            f.write(f"""<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset=\"UTF-8\">
-    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
-    <title>{topic.replace('_', ' ').title()} - {location.replace('_', ' ').title()}</title>
-    <meta name=\"description\" content=\"Latest updates on {topic.replace('_', ' ')} in {location.replace('_', ' ')}. Stay informed with RespireWork.\">
-    <meta http-equiv=\"refresh\" content=\"0; url={base_url}\" />
+  <meta charset="UTF-8">
+  <title>{topic.title()} in {location.title()} - RespireWork</title>
+  <meta name="description" content="Explore trending {topic} topics in {location}. Discover insights, trends, and more. Powered by RespireWork.">
+  <meta name="robots" content="index, follow">
+  <meta http-equiv="refresh" content="0; url={base_url}" />
+  <link rel="canonical" href="{base_url}" />
 </head>
 <body>
-    <p>Redirecting to <a href=\"{base_url}\">{base_url}</a>...</p>
+  <p>Redirecting to <a href="{base_url}">{base_url}</a>...</p>
 </body>
-</html>"""
+</html>""")
 
-        with open(page_filename, "w") as f:
-            f.write(html_content)
-            generated_pages.append(f"{page_url}")
+        # Add entry to sitemap
+        sitemap_entries.append(f"""  <url>
+    <loc>{full_url}</loc>
+    <lastmod>{datetime.utcnow().date()}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>""")
 
-# Update sitemap
-sitemap_entries = "\n".join([f"  <url><loc>{url}</loc><lastmod>{datetime.utcnow().date()}</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url>" for url in generated_pages])
-sitemap_content = f"""<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">
-{sitemap_entries}
-</urlset>"""
+# Write sitemap.xml
+with open(os.path.join(output_dir, "sitemap.xml"), "w", encoding="utf-8") as f:
+    f.write("""<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n""")
+    f.write("\n".join(sitemap_entries))
+    f.write("\n</urlset>")
 
-with open(sitemap_file, "w") as f:
-    f.write(sitemap_content)
-
-print(f"Generated {len(generated_pages)} pages and updated sitemap.xml")
-
-# Optional RSS Ping (print ping URLs for manual or automated use)
-for url in generated_pages:
-    print(f"Ping this: https://www.google.com/ping?sitemap={base_url}/sitemap.xml")
-    
+# Print sitemap ping URLs
+sitemap_url = f"{base_url}/sitemap.xml"
+print("\nSubmit your sitemap to search engines:")
+print("Google:", f"https://www.google.com/ping?sitemap={quote(sitemap_url)}")
+print("Bing:  ", f"https://www.bing.com/ping?sitemap={quote(sitemap_url)}")
