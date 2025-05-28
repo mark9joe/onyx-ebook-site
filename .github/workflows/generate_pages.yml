@@ -1,29 +1,29 @@
-name: Generate 100k Pages Every Minute
+name: Generate 100k Pages in 1 minute
 
-on:
-  schedule:
-    - cron: "* * * * *"  # Every minute
-  workflow_dispatch:
+on: schedule: - cron: '*/1 * * * *' workflow_dispatch:
 
-jobs:
-  generate:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+jobs: generate: runs-on: ubuntu-latest
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
+steps:
+  - name: Checkout Repository
+    uses: actions/checkout@v3
 
-      - name: Run page generator
-        run: python generate_pages.py
+  - name: Set up Python
+    uses: actions/setup-python@v4
+    with:
+      python-version: '3.10'
 
-      - name: Commit & Push changes
-        run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
-          git add .
-          git commit -m "Generated next 100k pages"
-          git push
+  - name: Install Python Dependencies
+    run: |
+      pip install requests
+
+  - name: Generate SEO Pages
+    run: python generate_redirect_pages.py
+
+  - name: Commit Changes
+    run: |
+      git config user.name "github-actions"
+      git config user.email "github-actions@github.com"
+      git add pages/*.html sitemap.xml || echo "Nothing to add"
+      git commit -m "Auto-generate SEO pages" || echo "Nothing to commit"
+      git push
