@@ -29,7 +29,7 @@ sitemap_entries = [
 count = 0
 for location in locations:
     for topic in topics:
-        if count >= 100000000000:
+        if count >= 10000000000000:
             break
         filename = f"{topic}_{location}.html"
         filepath = os.path.join(output_dir, filename)
