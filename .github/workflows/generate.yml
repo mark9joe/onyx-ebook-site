@@ -2,32 +2,31 @@ name: Generate SEO Pages
 
 on:
   schedule:
-    - cron: "* * * * *"  # every 1 minute
+    - cron: '*/1 * * * *'  # every 1 minute
   workflow_dispatch:
 
 jobs:
-  generate:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.x'
 
-      - name: Run generator
-        run: python generate_redirect_pages.py
+      - name: Install Dependencies
+        run: pip install --upgrade pip
 
-      - name: Set up Git for commit
+      - name: Run Script
+        run: python generate_seo_pages.py
+
+      - name: Commit Changes
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-
-      - name: Commit and push
-        run: |
           git add pages/*.html sitemap.xml || echo "Nothing to add"
-          git commit -m "Auto-generate SEO pages" || echo "No changes"
+          git commit -m "Auto-generate SEO pages" || echo "Nothing to commit"
           git push
