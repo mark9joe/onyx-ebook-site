@@ -1,6 +1,9 @@
 name: Generate 100000000000000 Pages
 
-on: schedule: - cron: "*/1 * * * *"  # Every 1 minute workflow_dispatch:
+on:
+  schedule:
+    - cron: '*/1 * * * *'  # Run every 1 minute
+  workflow_dispatch:
 
 jobs: generate-pages: runs-on: ubuntu-latest
 
