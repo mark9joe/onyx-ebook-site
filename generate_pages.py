@@ -1,60 +1,84 @@
 import os
 from datetime import datetime
-
-# Set up output folder
-PAGES_DIR = "pages"
-os.makedirs(PAGES_DIR, exist_ok=True)
+from urllib.parse import quote
 
 # Load locations and topics
-with open("locations.txt", "r") as f:
-    locations = [line.strip().lower().replace(",", "").replace(" ", "") for line in f if line.strip()]
+with open("locations.txt", "r") as loc_file:
+    locations = [line.strip().replace(",", "_").replace(" ", "").lower() for line in loc_file.readlines()]
 
-with open("topics.txt", "r") as f:
-    topics = [line.strip().lower().replace(" ", "") for line in f if line.strip()]
+with open("topics.txt", "r") as topic_file:
+    topics = [line.strip().replace(" ", "").lower() for line in topic_file.readlines()]
 
-# Limit the number of pages generated for demo
-MAX_PAGES = 1_000_000  # 1 trillion is impractical for any real deployment
+# Directory for pages
+os.makedirs("pages", exist_ok=True)
 
-# Initialize sitemap entries
+# Sitemap and RSS
 sitemap_entries = []
+rss_items = []
 
+# Base website URL
+base_url = "https://www.respirework.com"
+
+# Time for feed
+now = datetime.utcnow().strftime("%a, %d %b %Y %H:%M:%S +0000")
+
+# Generate pages
 count = 0
 for location in locations:
     for topic in topics:
-        if count >= MAX_PAGES:
-            break
+        slug = f"{topic}_{location}.html"
+        page_url = f"{base_url}/pages/{slug}"
 
-        filename = f"{topic}_{location}.html"
-        filepath = os.path.join(PAGES_DIR, filename)
-        page_url = f"https://www.respirework.com/pages/{filename}"
-
-        html_content = f"""<!DOCTYPE html>
+        # HTML content with redirect and metadata
+        html_content = f"""
+<!DOCTYPE html>
 <html lang=\"en\">
 <head>
-    <meta charset=\"UTF-8\">
-    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
-    <title>{topic.replace('-', ' ').title()} in {location.title()} | RespireWork</title>
-    <meta name=\"description\" content=\"Explore trending insights about {topic} in {location}. Stay informed via RespireWork.\">
-    <meta name=\"robots\" content=\"index, follow\">
-    <meta property=\"og:url\" content=\"{page_url}\"/>
-    <meta http-equiv=\"refresh\" content=\"0;url=https://www.respirework.com\" />
+  <meta charset=\"UTF-8\">
+  <meta http-equiv=\"refresh\" content=\"0; url={base_url}\">
+  <link rel=\"canonical\" href=\"{base_url}\">
+  <title>{topic.title()} in {location.title()}</title>
+  <meta name=\"description\" content=\"Explore trending topics about {topic.title()} in {location.title()}. Stay informed via RespireWork.\">
 </head>
 <body>
-    <p>Redirecting to <a href=\"https://www.respirework.com\">RespireWork</a>...</p>
+  <p>Redirecting to <a href=\"{base_url}\">{base_url}</a>...</p>
 </body>
-</html>"""
+</html>
+"""
 
-        with open(filepath, "w", encoding="utf-8") as f:
+        # Write page
+        with open(f"pages/{slug}", "w") as f:
             f.write(html_content)
 
-        sitemap_entries.append(f"<url><loc>{page_url}</loc><lastmod>{datetime.utcnow().date()}</lastmod></url>")
+        # Add to sitemap
+        sitemap_entries.append(f"<url><loc>{page_url}</loc><lastmod>{datetime.utcnow().date()}</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>")
+
+        # Add to RSS feed
+        rss_items.append(f"""
+<item>
+  <title>{topic.title()} in {location.title()}</title>
+  <link>{page_url}</link>
+  <description>Discover {topic} news from {location}, brought to you by RespireWork.</description>
+  <pubDate>{now}</pubDate>
+</item>""")
+
         count += 1
 
-# Write sitemap.xml
-with open("sitemap.xml", "w", encoding="utf-8") as f:
-    f.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
-    f.write("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n")
-    f.write("\n".join(sitemap_entries))
-    f.write("\n</urlset>")
+# Write sitemap
+with open("sitemap.xml", "w") as f:
+    f.write("""<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">
+" + "\n".join(sitemap_entries) + "\n</urlset>")
 
-print(f"✅ Generated {count} pages and sitemap.xml")
+# Write RSS feed
+with open("rss.xml", "w") as f:
+    f.write("""<?xml version=\"1.0\"?>
+<rss version=\"2.0\">
+<channel>
+  <title>RespireWork RSS Feed</title>
+  <link>https://www.respirework.com</link>
+  <description>Latest generated content</description>
+  <lastBuildDate>{now}</lastBuildDate>
+""" + "\n".join(rss_items) + "\n</channel>\n</rss>")
+
+print(f"✅ Generated {count} pages, sitemap.xml, and rss.xml")
