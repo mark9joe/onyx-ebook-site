@@ -1,65 +1,58 @@
 import os
+import random
 from datetime import datetime
-from urllib.parse import quote
 
-# Load locations and topics
-with open("locations.txt", "r") as f:
-    locations = [line.strip() for line in f if line.strip()]
+os.makedirs("pages", exist_ok=True)
 
 with open("topics.txt", "r") as f:
     topics = [line.strip() for line in f if line.strip()]
 
-# Directory to save generated HTML files
-output_dir = "pages"
-os.makedirs(output_dir, exist_ok=True)
+with open("locations.txt", "r") as f:
+    locations = [line.strip() for line in f if line.strip()]
 
-# Store sitemap entries
-sitemap_entries = []
+def slugify(text):
+    return text.lower().replace(",", "").replace(" ", "_")
 
-# Homepage URL
-base_url = "https://www.respirework.com"
+def generate_content(topic, location):
+    country, city = location.split(",")
+    return f"""
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{topic} News in {city}, {country}</title>
+        <meta name="description" content="Latest updates about {topic} in {city}, {country}. Stay informed with RespireWork.">
+        <meta name="keywords" content="{topic}, {city}, {country}, news, trends">
+        <meta http-equiv="refresh" content="0; url=https://www.respirework.com">
+    </head>
+    <body>
+        <h1>Redirecting to RespireWork...</h1>
+        <p>If not redirected, <a href="https://www.respirework.com">click here</a>.</p>
+    </body>
+    </html>
+    """
 
-for location in locations:
-    for topic in topics:
-        safe_location = location.lower().replace(",", "").replace(" ", "_")
-        safe_topic = topic.lower().replace(" ", "_")
-        filename = f"{safe_topic}_{safe_location}.html"
-        filepath = os.path.join(output_dir, filename)
-        full_url = f"{base_url}/{filename}"
+# Choose a random topic/location each time to keep unique
+topic = random.choice(topics)
+location = random.choice(locations)
+filename = f"{slugify(topic)}_{slugify(location)}.html"
+filepath = os.path.join("pages", filename)
 
-        # Create redirect HTML content
-        with open(filepath, "w", encoding="utf-8") as f:
-            f.write(f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>{topic.title()} in {location.title()} - RespireWork</title>
-  <meta name="description" content="Explore trending {topic} topics in {location}. Discover insights, trends, and more. Powered by RespireWork.">
-  <meta name="robots" content="index, follow">
-  <meta http-equiv="refresh" content="0; url={base_url}" />
-  <link rel="canonical" href="{base_url}" />
-</head>
-<body>
-  <p>Redirecting to <a href="{base_url}">{base_url}</a>...</p>
-</body>
-</html>""")
+with open(filepath, "w") as f:
+    f.write(generate_content(topic, location))
 
-        # Add entry to sitemap
-        sitemap_entries.append(f"""  <url>
-    <loc>{full_url}</loc>
+# Generate or update sitemap
+with open("sitemap.xml", "w") as f:
+    f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+    f.write('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n')
+    for file in os.listdir("pages"):
+        if file.endswith(".html"):
+            url = f"https://www.respirework.com/pages/{file}"
+            f.write(f"""  <url>
+    <loc>{url}</loc>
     <lastmod>{datetime.utcnow().date()}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
-  </url>""")
-
-# Write sitemap.xml
-with open(os.path.join(output_dir, "sitemap.xml"), "w", encoding="utf-8") as f:
-    f.write("""<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n""")
-    f.write("\n".join(sitemap_entries))
-    f.write("\n</urlset>")
-
-# Print sitemap ping URLs
-sitemap_url = f"{base_url}/sitemap.xml"
-print("\nSubmit your sitemap to search engines:")
-print("Google:", f"https://www.google.com/ping?sitemap={quote(sitemap_url)}")
-print("Bing:  ", f"https://www.bing.com/ping?sitemap={quote(sitemap_url)}")
+  </url>\n""")
+    f.write('</urlset>')
