@@ -1,19 +1,16 @@
-name: Generate AI Country Pages
+name: Generate SEO Pages
 
 on:
   schedule:
-    - cron: "*/1 * * * *"  # Runs every minute
-  workflow_dispatch:       # Allows manual trigger
+    - cron: "* * * * *"  # every 1 minute
+  workflow_dispatch:
 
 jobs:
   generate:
     runs-on: ubuntu-latest
 
-    env:
-      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-
     steps:
-      - name: Checkout Repository
+      - name: Checkout
         uses: actions/checkout@v3
 
       - name: Set up Python
@@ -21,16 +18,16 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install Python Dependencies
-        run: pip install openai==0.28
+      - name: Run generator
+        run: python generate_seo_pages.py
 
-      - name: Run Page Generator
-        run: python generate_redirect_pages.py
-
-      - name: Commit and Push New Pages
+      - name: Set up Git for commit
         run: |
           git config user.name "github-actions"
-          git config user.email "actions@github.com"
-          git add *.html sitemap.xml
-          git commit -m "Generated AI content pages"
-          git push || echo "Nothing to push"
+          git config user.email "github-actions@github.com"
+
+      - name: Commit and push
+        run: |
+          git add pages/*.html sitemap.xml || echo "Nothing to add"
+          git commit -m "Auto-generate SEO pages" || echo "No changes"
+          git push
