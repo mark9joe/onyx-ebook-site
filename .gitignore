@@ -3,3 +3,7 @@ node_modules/
 sitemap.xml
 rss.xml
 *.xml.gz
+sitemap.xml
+rss.xml
+sitemap_*.xml 
+rss_*.xml
