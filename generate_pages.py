@@ -1,78 +1,60 @@
 import os
-import time
 from datetime import datetime
 
-# Configuration
-output_dir = "pages"
-homepage_url = "https://www.respirework.com"
-location_file = "locations.txt"
-topic_file = "topics.txt"
-sitemap_file = "sitemap.xml"
-
-# Ensure output directory exists
-os.makedirs(output_dir, exist_ok=True)
+# Set up output folder
+PAGES_DIR = "pages"
+os.makedirs(PAGES_DIR, exist_ok=True)
 
 # Load locations and topics
-with open(location_file, 'r') as f:
-    locations = [line.strip().replace(",", "_").replace(" ", "_").lower() for line in f.readlines() if line.strip()]
+with open("locations.txt", "r") as f:
+    locations = [line.strip().lower().replace(",", "").replace(" ", "") for line in f if line.strip()]
 
-with open(topic_file, 'r') as f:
-    topics = [line.strip().replace(" ", "_").lower() for line in f.readlines() if line.strip()]
+with open("topics.txt", "r") as f:
+    topics = [line.strip().lower().replace(" ", "") for line in f if line.strip()]
 
-# Create a sitemap header
-sitemap_entries = [
-    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
-    "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">"
-]
+# Limit the number of pages generated for demo
+MAX_PAGES = 1_000_000  # 1 trillion is impractical for any real deployment
 
-# Generate pages
+# Initialize sitemap entries
+sitemap_entries = []
+
 count = 0
 for location in locations:
     for topic in topics:
-        if count >= 10000000000000:
+        if count >= MAX_PAGES:
             break
+
         filename = f"{topic}_{location}.html"
-        filepath = os.path.join(output_dir, filename)
-        
-        with open(filepath, 'w') as f:
-            f.write(f"""
-<!DOCTYPE html>
+        filepath = os.path.join(PAGES_DIR, filename)
+        page_url = f"https://www.respirework.com/pages/{filename}"
+
+        html_content = f"""<!DOCTYPE html>
 <html lang=\"en\">
 <head>
     <meta charset=\"UTF-8\">
     <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
-    <meta name=\"description\" content=\"Latest updates and trends on {topic.replace('_', ' ')} in {location.replace('_', ' ').title()}.\">
+    <title>{topic.replace('-', ' ').title()} in {location.title()} | RespireWork</title>
+    <meta name=\"description\" content=\"Explore trending insights about {topic} in {location}. Stay informed via RespireWork.\">
     <meta name=\"robots\" content=\"index, follow\">
-    <meta http-equiv=\"refresh\" content=\"0; url={homepage_url}\">
-    <title>{topic.replace('_', ' ').title()} in {location.replace('_', ' ').title()}</title>
+    <meta property=\"og:url\" content=\"{page_url}\"/>
+    <meta http-equiv=\"refresh\" content=\"0;url=https://www.respirework.com\" />
 </head>
 <body>
-    <p>If you're not redirected automatically, visit <a href=\"{homepage_url}\">our homepage</a>.</p>
+    <p>Redirecting to <a href=\"https://www.respirework.com\">RespireWork</a>...</p>
 </body>
-</html>
-""")
+</html>"""
 
-        sitemap_entries.append(f"  <url><loc>{homepage_url}/pages/{filename}</loc><lastmod>{datetime.utcnow().date()}</lastmod></url>")
+        with open(filepath, "w", encoding="utf-8") as f:
+            f.write(html_content)
+
+        sitemap_entries.append(f"<url><loc>{page_url}</loc><lastmod>{datetime.utcnow().date()}</lastmod></url>")
         count += 1
 
-# Close sitemap
-sitemap_entries.append("</urlset>")
-
 # Write sitemap.xml
-with open(sitemap_file, 'w') as f:
+with open("sitemap.xml", "w", encoding="utf-8") as f:
+    f.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
+    f.write("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n")
     f.write("\n".join(sitemap_entries))
+    f.write("\n</urlset>")
 
 print(f"✅ Generated {count} pages and sitemap.xml")
-
-# Optionally: ping search engines (basic method)
-import requests
-for engine in [
-    f"http://www.google.com/ping?sitemap={homepage_url}/sitemap.xml",
-    f"http://www.bing.com/ping?sitemap={homepage_url}/sitemap.xml"
-]:
-    try:
-        res = requests.get(engine)
-        print(f"Pinged {engine}: {res.status_code}")
-    except Exception as e:
-        print(f"Failed to ping {engine}: {e}")
-            
