@@ -21,7 +21,7 @@ jobs:
         run: pip install --upgrade pip
 
       - name: Run Script
-        run: python generate_seo_pages.py
+        run: python generate_redirect_pages.py
 
       - name: Commit Changes
         run: |
