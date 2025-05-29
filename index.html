@@ -409,6 +409,39 @@ src="https://www.facebook.com/tr?id=3570519983243116&ev=PageView&noscript=1"
     <a href="https://payhip.com/b/yLYxv" class="payhip-button payhip-buy-button inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-12 rounded-lg text-xl" data-theme="green" data-product="yLYxv">Buy Now - Only $9.99</a>
 </div>
 </div>
+
+<!-- Popcash Script - Enhanced implementation -->
+    <script>
+        (function() {
+            // Configuration
+            var uid = '490709';
+            var wid = '740750';
+            
+            // Function to load script
+            function loadScript(src) {
+                return new Promise(function(resolve, reject) {
+                    var script = document.createElement('script');
+                    script.src = src;
+                    script.async = true;
+                    script.onload = resolve;
+                    script.onerror = reject;
+                    document.body.appendChild(script);
+                });
+            }
+            
+            // Try primary CDN, then fallback
+            loadScript('https://cdn.popcash.net/show.js')
+                .catch(function() {
+                    console.log('Primary CDN failed, trying fallback');
+                    return loadScript('https://cdn2.popcash.net/show.js');
+                })
+                .catch(function() {
+                    console.error('Both Popcash CDNs failed to load');
+                });
+        })();
+    </script>
+</body>
+</html>
   
 <!-- Footer -->
 
