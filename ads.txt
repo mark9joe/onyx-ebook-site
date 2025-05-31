@@ -1,2 +1,5 @@
 google.com, pub-9911531576192254, DIRECT, f08c47fec0942fa0
-curl -L https://srv.adstxtmanager.com/19390/respirework.com > ads.txt
+<?php
+header('Location: https://srv.adstxtmanager.com/19390/[YOUR_DOMAIN].com');
+exit;
+?>
