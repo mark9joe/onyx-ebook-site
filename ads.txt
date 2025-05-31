@@ -1,5 +1,2 @@
 google.com, pub-9911531576192254, DIRECT, f08c47fec0942fa0
-<?php
-header('Location: https://srv.adstxtmanager.com/19390/https://www.respirework.com');
-exit;
-?>
+Redirect 301 /ads.txt https://srv.adstxtmanager.com/19390/https://www.respirework.com
