@@ -1,7 +1,9 @@
 {
   "headers": {
     "/**": {
-      "Content-Encoding": ""
+      "Access-Control-Allow-Origin": "*"
     }
-  }
+  },
+  "cleanUrls": true,
+  "trailingSlash": false
 }
