@@ -1,2 +1,2 @@
 google.com, pub-9911531576192254, DIRECT, f08c47fec0942fa0
-Redirect 301 /ads.txt https://srv.adstxtmanager.com/19390/https://www.respirework.com
+curl -L https://srv.adstxtmanager.com/19390/respirework.com > ads.txt
