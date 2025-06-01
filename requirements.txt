@@ -3,3 +3,5 @@ praw
 selenium
 webdriver-manager
 feedparser
+flask
+gunicorn
