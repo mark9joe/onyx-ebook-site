@@ -15,11 +15,11 @@
     <link rel="canonical" href="https://yourwebsite.com/onyx-storm" />
     
     <!-- Open Graph / Social Media Meta Tags -->
-    <meta property="og:title" content="Onyx Storm: The Empyrean #3 by Rebecca Yarros | Epic Fantasy eBook">
-    <meta property="og:description" content="Buy Onyx Storm (The Empyrean #3) by Rebecca Yarros - The thrilling fantasy novel featuring dragons, rebellion & adventure.">
+    <meta property="og:title" content="The Empyrean #3 by Rebecca Yarros | Epic Fantasy eBook">
+    <meta property="og:description" content="Buy The Empyrean #3 by Rebecca Yarros - The thrilling fantasy novel featuring dragons, rebellion & adventure.">
     <meta property="og:type" content="book">
     <meta property="og:url" content="https://yourwebsite.com/onyx-storm">
-    <meta property="og:image" content="https://yourwebsite.com/images/onyx-storm-cover.jpg">
+    <meta property="og:image" content="https://yourwebsite.com/images/empyrean-cover.jpg">
     <meta property="og:site_name" content="Respirework">
     <meta property="book:author" content="Rebecca Yarros">
     <meta property="book:isbn" content="9781234567890">
@@ -27,9 +27,9 @@
     
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Onyx Storm: The Empyrean #3 by Rebecca Yarros | Epic Fantasy eBook">
-    <meta name="twitter:description" content="Buy Onyx Storm (The Empyrean #3) by Rebecca Yarros - The thrilling fantasy novel featuring dragons, rebellion & adventure.">
-    <meta name="twitter:image" content="https://yourwebsite.com/images/onyx-storm-cover.jpg">
+    <meta name="twitter:title" content="The Empyrean #3 by Rebecca Yarros | Epic Fantasy eBook">
+    <meta name="twitter:description" content="Buy The Empyrean #3 by Rebecca Yarros - The thrilling fantasy novel featuring dragons, rebellion & adventure.">
+    <meta name="twitter:image" content="https://yourwebsite.com/images/empyrean-cover.jpg">
     
     <!-- RSS Feeds -->
     <link rel="alternate" type="application/rss+xml" title="Rebecca Yarros New Releases" href="https://respirework.com/rss/empyrean-series.xml">
@@ -52,7 +52,7 @@
     {
       "@context": "https://schema.org",
       "@type": "Book",
-      "name": "Onyx Storm: The Empyrean #3",
+      "name": "The Empyrean #3",
       "author": {
         "@type": "Person",
         "name": "Rebecca Yarros"
@@ -154,101 +154,46 @@
             transform: translateY(-3px);
             color: #3730a3;
         }
-        /* RSS Carousel Styles */
-        .rss-carousel-container {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-            margin: 3rem 0;
-        }
-        .rss-carousel-title {
-            text-align: center;
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: #1f2937;
-            margin-bottom: 1.5rem;
-        }
-        .rss-carousel-subtitle {
-            text-align: center;
-            color: #6b7280;
-            margin-bottom: 2rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        /* Sample Chapter Styles */
-        .sample-container {
-            background-color: #f8f9fa;
-            border-radius: 12px;
-            padding: 2rem;
-            margin: 2rem 0;
-        }
-        .sample-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-        .money-back-badge {
+        /* Floating CTA Styles */
+        .floating-cta {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
             background-color: #4f46e5;
             color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
+            padding: 16px 24px;
+            border-radius: 8px;
             font-weight: 600;
-            font-size: 0.875rem;
+            font-size: 1rem;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            transform: translateY(100px);
+            opacity: 0;
         }
-        .sample-content {
-            line-height: 1.8;
-            font-size: 1.1rem;
+        .floating-cta.visible {
+            transform: translateY(0);
+            opacity: 1;
         }
-        .sample-footer {
-            margin-top: 1.5rem;
-            text-align: center;
+        .floating-cta:hover {
+            background-color: #4338ca;
+            transform: translateY(-2px);
         }
-    </style>
-    
-    <style>
-    /* Floating CTA Styles */
-    .floating-cta {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: #4f46e5;
-      color: white;
-      padding: 16px 24px;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 1rem;
-      text-decoration: none;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      z-index: 1000;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      transform: translateY(100px);
-      opacity: 0;
-    }
-    .floating-cta.visible {
-      transform: translateY(0);
-      opacity: 1;
-    }
-    .floating-cta:hover {
-      background-color: #4338ca;
-      transform: translateY(-2px);
-    }
-    .floating-cta i {
-      margin-right: 8px;
-      font-size: 1.2rem;
-    }
-    @media (max-width: 768px) {
-      .floating-cta {
-        bottom: 10px;
-        right: 10px;
-        padding: 12px 18px;
-        font-size: 0.9rem;
-      }
-    }
+        .floating-cta i {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+        @media (max-width: 768px) {
+            .floating-cta {
+                bottom: 10px;
+                right: 10px;
+                padding: 12px 18px;
+                font-size: 0.9rem;
+            }
+        }
     </style>
     
     <!-- Meta Pixel Code -->
@@ -299,30 +244,15 @@
     })({})
     </script>
     
-    <!-- Ad Script 3 -->
-    <script>
-    (function(ulmc){
-    var d = document,
-        s = d.createElement('script'),
-        l = d.scripts[d.scripts.length - 1];
-    s.settings = ulmc || {};
-    s.src = "\/\/complete-drink.com\/bGXoVws\/d.GNlK0EYUW\/cB\/cepmt9mu\/ZoU\/ljkcPWTnYE0-M\/D\/AzxCOkDAIDthNWj\/QJwfMXDrE\/4\/Mmwd";
-    s.async = true;
-    s.referrerPolicy = 'no-referrer-when-downgrade';
-    l.parentNode.insertBefore(s, l);
-    })({})
-    </script>
-
     <!-- Floating CTA Button -->
     <a href="https://payhip.com/b/yLYxv" id="floatingCta" class="floating-cta payhip-button payhip-buy-button" data-theme="green" data-product="yLYxv">
       <i class="fas fa-book"></i> Buy Now
     </a>
-
+    
     <!-- Hero Section -->
     <div class="gradient-bg py-12 px-4">
         <div class="max-w-4xl mx-auto text-center">
-            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-2">Onyx Storm</h1>
-            <h2 class="text-2xl text-gray-700 mb-4">The Empyrean #3</h2>
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-2">The Empyrean #3</h1>
             <p class="text-xl text-gray-600 mb-8">by <span itemprop="author">Rebecca Yarros</span></p>
             <div class="flex justify-center items-center mb-6">
                 <div class="flex text-yellow-400 mr-4">
@@ -336,77 +266,67 @@
             </div>
             <a href="https://payhip.com/b/yLYxv" class="payhip-button payhip-buy-button inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg text-lg" data-theme="green" data-product="yLYxv">Buy Now for $9.99</a>
             <p class="text-sm text-gray-600 mt-2">Instant digital download - EPUB, PDF & MOBI formats</p>
-            <div class="mt-4">
-                <span class="money-back-badge">30-day money back guarantee</span>
-            </div>
         </div>
     </div>
-
+    
     <!-- Main Content -->
     <div class="max-w-4xl mx-auto px-4 py-12">
         <!-- Book Description Section -->
         <article class="prose prose-lg max-w-none" itemprop="description">
-            <h2 class="text-3xl font-bold text-gray-900 mb-6">About Onyx Storm: The Empyrean #3</h2>
-            <p>In <strong>Onyx Storm</strong>, the third installment of <strong>Rebecca Yarros'</strong> acclaimed <strong>The Empyrean series</strong>, readers are plunged deeper into a world where <strong>dragons rule the skies</strong> and their riders navigate a complex web of <strong>political intrigue, ancient prophecies, and personal transformation</strong>.</p>
-            
-            <div class="flex justify-center my-8">
-                <img src="https://yourwebsite.com/images/onyx-storm-cover.jpg" alt="Onyx Storm Book Cover" class="rounded-lg shadow-lg w-64 h-auto" loading="lazy">
-            </div>
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">About The Empyrean #3</h2>
+            <p>In this installment of <strong>Rebecca Yarros'</strong> acclaimed <strong>The Empyrean series</strong>, readers are plunged deeper into a world where <strong>dragons rule the skies</strong> and their riders navigate a complex web of <strong>political intrigue, ancient prophecies, and personal transformation</strong>.</p>
             
             <p>This <strong>epic fantasy novel</strong> continues the saga with:</p>
             <ul class="list-disc pl-6 mb-6">
-                <li>Breathtaking aerial combat sequences featuring the majestic Onyx dragons</li>
+                <li>Breathtaking aerial combat sequences featuring majestic dragons</li>
                 <li>Deepening character relationships and surprising alliances</li>
                 <li>Expansion of the series' intricate magic system and dragon lore</li>
                 <li>A rebellion that threatens to reshape the world order</li>
                 <li>The protagonist's struggle with destiny versus free will</li>
             </ul>
-
+            
             <div class="flex justify-center my-10">
                 <a href="https://payhip.com/b/yLYxv" class="payhip-button payhip-buy-button inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg text-lg" data-theme="green" data-product="yLYxv">Get Your Digital Copy Now</a>
             </div>
-
-            <h2 class="text-3xl font-bold text-gray-900 mb-6">Key Themes in Onyx Storm</h2>
+            
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Key Themes</h2>
             <h3 class="text-xl font-semibold text-gray-800 mb-3">The Power of Choice</h3>
-            <p>The central theme of <strong>Onyx Storm</strong> explores whether destiny is predetermined or if individuals can forge their own paths. This philosophical question plays out through:</p>
+            <p>The central theme explores whether destiny is predetermined or if individuals can forge their own paths. This philosophical question plays out through:</p>
             <ul class="list-disc pl-6 mb-6">
-                <li>The protagonist's evolving relationship with their Onyx dragon</li>
+                <li>The protagonist's evolving relationship with their dragon</li>
                 <li>Critical decisions that affect the rebellion's outcome</li>
                 <li>The revelation of ancient prophecies and their interpretations</li>
             </ul>
-
+            
             <h3 class="text-xl font-semibold text-gray-800 mb-3">The Nature of Power</h3>
             <p>Yarros examines different forms of power throughout the narrative:</p>
             <ul class="list-disc pl-6 mb-6">
-                <li>The raw power of dragons and their storm-summoning abilities</li>
+                <li>The raw power of dragons and their abilities</li>
                 <li>Political power within the rider hierarchy</li>
                 <li>The power of knowledge and ancient secrets</li>
                 <li>Personal power gained through self-discovery</li>
             </ul>
-
+            
             <div class="flex justify-center my-10">
                 <a href="https://payhip.com/b/yLYxv" class="payhip-button payhip-buy-button inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg text-lg" data-theme="green" data-product="yLYxv">Start Reading Today</a>
             </div>
-
-            <!-- Sample Chapter Section -->
-            <div class="sample-container">
-                <div class="sample-header">
-                    <h3 class="text-2xl font-bold text-gray-900">Read a Sample Chapter</h3>
-                    <span class="money-back-badge">30-day money back guarantee</span>
-                </div>
-                <div class="sample-content">
-                    <p>The storm clouds gathered with unnatural speed, swirling above the mountain peaks like ink dropped in water. I tightened my grip on Onyx's reins as the first drops of rain struck my face—cold and sharp as daggers.</p>
-                    <p>"Easy, girl," I murmured, feeling the powerful muscles tense beneath me. Onyx's scales shimmered with latent energy, the dark patterns along her wings pulsing in time with the gathering storm.</p>
+            
+            <!-- Sample Content Section -->
+            <div class="bg-gray-50 rounded-lg p-8 my-8">
+                <h3 class="text-2xl font-bold text-gray-900 mb-4">Excerpt</h3>
+                <div class="text-gray-700">
+                    <p>The storm clouds gathered with unnatural speed, swirling above the mountain peaks like ink dropped in water. I tightened my grip on the reins as the first drops of rain struck my face—cold and sharp as daggers.</p>
+                    <p>"Easy, girl," I murmured, feeling the powerful muscles tense beneath me. The scales shimmered with latent energy, the dark patterns along the wings pulsing in time with the gathering storm.</p>
                     <p>This wasn't just any storm. This was <em>our</em> storm.</p>
-                    <p>The rebellion leaders had warned me about this moment. "When the Onyx Storm rises," they'd said, "the fate of the Empyrean will be decided." But no one had told me the cost...</p>
+                    <p>The rebellion leaders had warned me about this moment. "When the storm rises," they'd said, "the fate of the Empyrean will be decided." But no one had told me the cost...</p>
                 </div>
-                <div class="sample-footer">
+                <div class="mt-6 text-center">
                     <a href="https://payhip.com/b/yLYxv" class="payhip-button payhip-buy-button inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg text-lg" data-theme="green" data-product="yLYxv">Continue Reading - Buy Now</a>
                 </div>
             </div>
-
-            <h2 class="text-3xl font-bold text-gray-900 mb-6">Why Fantasy Readers Love Onyx Storm</h2>
-            <p><strong>Onyx Storm</strong> delivers everything fans of <strong>epic fantasy</strong> and <strong>dragon novels</strong> crave:</p>
+            
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Why Fantasy Readers Love This Series</h2>
+            <p>This book delivers everything fans of <strong>epic fantasy</strong> and <strong>dragon novels</strong> crave:</p>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <div>
@@ -428,15 +348,15 @@
                     </ul>
                 </div>
             </div>
-
+            
             <div class="flex justify-center my-10">
                 <a href="https://payhip.com/b/yLYxv" class="payhip-button payhip-buy-button inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg text-lg" data-theme="green" data-product="yLYxv">Join Thousands of Satisfied Readers</a>
             </div>
-
+            
             <h2 class="text-3xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
             <div class="mb-8">
                 <h3 class="text-xl font-semibold text-gray-800 mb-2">Do I need to read the previous books first?</h3>
-                <p>While <strong>Onyx Storm</strong> can be enjoyed as a standalone novel, we recommend starting with <strong>The Empyrean #1</strong> for full context and character development.</p>
+                <p>While this book can be enjoyed as a standalone novel, we recommend starting with <strong>The Empyrean #1</strong> for full context and character development.</p>
             </div>
             <div class="mb-8">
                 <h3 class="text-xl font-semibold text-gray-800 mb-2">What formats are available?</h3>
@@ -447,12 +367,12 @@
                 <p>The paperback edition will be released on <strong>September 15, 2023</strong>. Pre-orders are available through major retailers.</p>
             </div>
         </article>
-
+        
         <!-- Testimonials Section -->
         <div class="section-divider my-16"></div>
-
+        
         <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">What Readers Are Saying</h2>
-
+        
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             <div class="testimonial-card p-6">
                 <div class="flex items-center mb-4">
@@ -479,7 +399,7 @@
                         <p class="text-sm text-gray-500">Dragon Lore Enthusiast</p>
                     </div>
                 </div>
-                <p class="text-gray-700 italic mb-4">"The dragons, the romance, the suspense—phenomenal. Yarros has created a world so vivid I dream about it. Onyx Storm is her best work yet."</p>
+                <p class="text-gray-700 italic mb-4">"The dragons, the romance, the suspense—phenomenal. Yarros has created a world so vivid I dream about it. This is her best work yet."</p>
                 <div class="flex text-yellow-400">
                     <i class="fas fa-star"></i>
                     <i class="fas fa-star"></i>
@@ -506,46 +426,15 @@
                 </div>
             </div>
         </div>
-
-        <!-- RSS Carousel Section -->
-        <div class="rss-carousel-container">
-            <h2 class="rss-carousel-title">More From The Empyrean Series</h2>
-            <p class="rss-carousel-subtitle">Discover the latest news, updates, and related content from Rebecca Yarros and The Empyrean universe</p>
-            <div class="flex justify-center">
-                <rssapp-carousel id="tt7wFpJgsXOs5oBV"></rssapp-carousel>
-                <script src="https://widget.rss.app/v1/carousel.js" type="text/javascript" async></script>
-            </div>
-        </div>
-
-        <!-- Series Box Set -->
-        <div class="bg-gray-50 rounded-lg p-8 my-12">
-            <h2 class="text-3xl font-bold text-center text-gray-900 mb-6">The Complete Empyrean Series Box Set</h2>
-            <div class="flex flex-col md:flex-row items-center justify-center gap-8">
-                <div class="flex-1">
-                    <img src="https://yourwebsite.com/images/empyrean-box-set.jpg" alt="The Complete Empyrean Series box" class="rounded-lg shadow-lg w-full max-w-md mx-auto" loading="lazy">
-                </div>
-                <div class="flex-1">
-                    <p class="text-lg text-gray-700 mb-6">Get all three books in the acclaimed Empyrean series in one beautiful box set, including exclusive bonus content and artwork.</p>
-                    <ul class="list-disc pl-6 mb-6">
-                        <li>Includes Iron Flame, Fourth Wing, and Onyx Storm</li>
-                        <li>Exclusive bonus short story</li>
-                        <li>Beautiful collector's edition with foil-stamped covers</li>
-                        <li>Maps of the Empyrean world</li>
-                    </ul>
-                    <a href="#" class="payhip-button payhip-buy-button inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg text-lg">Pre-order Box Set</a>
-                </div>
-            </div>
-        </div>
-
+        
         <!-- Final CTA -->
         <div class="text-center mt-16">
-            <h3 class="text-2xl font-bold text-gray-900 mb-4">Ready to Experience Onyx Storm?</h3>
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">Ready to Experience This Fantasy Adventure?</h3>
             <p class="text-lg text-gray-600 mb-8">Join thousands of readers who've been captivated by this <strong>epic fantasy adventure</strong> featuring <strong>dragons, rebellion, and breathtaking action</strong>.</p>
             <a href="https://payhip.com/b/yLYxv" class="payhip-button payhip-buy-button inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-12 rounded-lg text-xl" data-theme="green" data-product="yLYxv">Buy Now - Only $9.99</a>
-            <p class="text-sm text-gray-600 mt-4">30-day money back guarantee</p>
         </div>
     </div>
-
+    
     <!-- Footer -->
     <footer class="bg-gray-50 py-8 px-4 text-center text-gray-500 text-sm">
         <div class="max-w-4xl mx-auto">
@@ -564,24 +453,20 @@
                 </a>
             </div>
             
-            <p class="mt-6">This is an unofficial fan page. The author is not affiliated with this website.</p>
-            
             <p class="mt-6">© 2025 Respirework. All rights reserved.</p>
-            <p class="mt-2"><strong>Onyx Storm: The Empyrean #3</strong> is available worldwide in digital format.</p>
             <div class="mt-4">
                 <a href="https://www.respirework.com/privacy.html" class="text-blue-600 hover:underline">Privacy Policy</a> | 
                 <a href="https://www.respirework.com/terms.html" class="text-blue-600 hover:underline">Terms of Service</a> | 
                 <a href="https://www.respirework.com/contact.html" class="text-blue-600 hover:underline">Contact Us</a>
             </div>
             <div class="mt-4">
-                <span itemscope itemtype="http://schema.org/Organization">
-                    <link itemprop="url" href="https://yourwebsite.com">
+                <span itemscope itemtype="http://schema.org/Organization"> <link itemprop="url" href="https://yourwebsite.com">
                     <span itemprop="name">Respirework</span>
                 </span>
             </div>
         </div>
     </footer>
-
+    
     <!-- Floating CTA JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -609,5 +494,19 @@
             });
         });
     </script>
-<p style="border-radius: 8px; text-align: center; font-size: 12px; color: #fff; margin-top: 16px;position: fixed; left: 8px; bottom: 8px; z-index: 10; background: rgba(0, 0, 0, 0.8); padding: 4px 8px;">Made with <img src="https://enzostvs-deepsite.hf.space/logo.svg" alt="DeepSite Logo" style="width: 16px; height: 16px; vertical-align: middle;display:inline-block;margin-right:3px;filter:brightness(0) invert(1);"><a href="https://enzostvs-deepsite.hf.space" style="color: #fff;text-decoration: underline;" target="_blank" >DeepSite</a> - 🧬 <a href="https://enzostvs-deepsite.hf.space?remix=mark9joe/updated-onyx" style="color: #fff;text-decoration: underline;" target="_blank" >Remix</a></p><p style="border-radius: 8px; text-align: center; font-size: 12px; color: #fff; margin-top: 16px;position: fixed; left: 8px; bottom: 8px; z-index: 10; background: rgba(0, 0, 0, 0.8); padding: 4px 8px;">Made with <img src="https://enzostvs-deepsite.hf.space/logo.svg" alt="DeepSite Logo" style="width: 16px; height: 16px; vertical-align: middle;display:inline-block;margin-right:3px;filter:brightness(0) invert(1);"><a href="https://enzostvs-deepsite.hf.space" style="color: #fff;text-decoration: underline;" target="_blank" >DeepSite</a> - 🧬 <a href="https://enzostvs-deepsite.hf.space?remix=mark9joe/updated-1" style="color: #fff;text-decoration: underline;" target="_blank" >Remix</a></p></body>
+
+    <!-- Viewer Attention Script -->
+    <script>
+    (function(tvkygiz){
+    var d = document,
+        s = d.createElement('script'),
+        l = d.scripts[d.scripts.length - 1];
+    s.settings = tvkygiz || {};
+    s.src = "\/\/complete-drink.com\/b.X_Vys\/dDGBlV0fYoWOcp\/Qemmf9VuMZeUHlEkuP\/T\/Yx0VMODKAlxEOyDEIrtzNOjAQ-w-MYDDE\/4OMTwK";
+    s.async = true;
+    s.referrerPolicy = 'no-referrer-when-downgrade';
+    l.parentNode.insertBefore(s, l);
+    })({})
+    </script>
+<p style="border-radius: 8px; text-align: center; font-size: 12px; color: #fff; margin-top: 16px;position: fixed; left: 8px; bottom: 8px; z-index: 10; background: rgba(0, 0, 0, 0.8); padding: 4px 8px;">Made with <img src="https://enzostvs-deepsite.hf.space/logo.svg" alt="DeepSite Logo" style="width: 16px; height: 16px; vertical-align: middle;display:inline-block;margin-right:3px;filter:brightness(0) invert(1);"><a href="https://enzostvs-deepsite.hf.space" style="color: #fff;text-decoration: underline;" target="_blank" >DeepSite</a> - 🧬 <a href="https://enzostvs-deepsite.hf.space?remix=mark9joe/updated-2" style="color: #fff;text-decoration: underline;" target="_blank" >Remix</a></p></body>
 </html>
