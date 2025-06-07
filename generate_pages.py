@@ -1,115 +1,32 @@
-import os
-import hashlib
-from itertools import product
-from pathlib import Path
-from datetime import datetime
+File: scripts/generate_pages.py
 
-# Constants
-BASE_URL = "https://www.respirework.com"
-PAGES_DIR = Path("pages")
-SITEMAP_DIR = Path("sitemaps")
-RSS_DIR = Path("rssfeeds")
-MAX_URLS_PER_SITEMAP = 50000  # per Google guideline
+Purpose: Generate AMP news pages based on trending topics
 
-# Read topics and locations
-with open("topics.txt", "r", encoding="utf-8") as f:
-    topics = [line.strip() for line in f if line.strip()]
-with open("locations.txt", "r", encoding="utf-8") as f:
-    locations = [line.strip() for line in f if line.strip()]
+import os import requests from datetime import datetime
 
-# Ensure directories exist
-PAGES_DIR.mkdir(exist_ok=True)
-SITEMAP_DIR.mkdir(exist_ok=True)
-RSS_DIR.mkdir(exist_ok=True)
+NEWS_DIR = "news" TOPIC_SOURCE = "https://trends.google.com/trends/trendingsearches/daily/rss?geo=US" TEMPLATE = '''<!doctype html>
 
-urls = []
-rss_items = []
+<html ⚡ lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{title}</title>
+  <link rel="canonical" href="https://respirework.com/news/{slug}.html">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <meta name="description" content="{summary}">
+  <style amp-boilerplate>body{visibility:hidden}</style>
+  <script async src="https://cdn.ampproject.org/v0.js"></script>
+</head>
+<body>
+  <h1>{title}</h1>
+  <p><em>{date}</em></p>
+  <p>{summary}</p>
+  <hr>
+  <div>{ads}</div>
+</body>
+</html>'''ADS_BLOCK = '''<script> (function(wgg){ var d = document, s = d.createElement('script'), l = d.scripts[d.scripts.length - 1]; s.settings = wgg || {}; s.src = "//complete-drink.com/bgXEV/sXd.GAl/0tY/W/cW/ueomD9fuzZuU-lzkfPfT/Yo0vMGDgAexkO/DKIethNbj-QawTMADPED4WMmwo"; s.async = true; s.referrerPolicy = 'no-referrer-when-downgrade'; l.parentNode.insertBefore(s, l); })({}) </script>'''
 
-print("Generating HTML pages with redirection...")
-for topic, location in product(topics, locations):
-    slug = f"{topic}_{location}".lower().replace(" ", "-")
-    filename = PAGES_DIR / f"{slug}.html"
-    page_url = f"{BASE_URL}/pages/{slug}.html"
+def fetch_trending_topics(): response = requests.get(TOPIC_SOURCE) items = [] if response.ok: from xml.etree import ElementTree as ET root = ET.fromstring(response.content) for item in root.findall(".//item"): title = item.findtext("title") summary = item.findtext("description") slug = "-".join(title.lower().split()) items.append((title, summary, slug)) return items[:100]
 
-    # Write HTML page
-    with open(filename, "w", encoding="utf-8") as f:
-        f.write(f"""
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta http-equiv="refresh" content="0; url={BASE_URL}" />
-            <title>{topic.title()} in {location.title()}</title>
-            <meta name="description" content="Trending {topic} updates in {location}. Visit RespireWork." />
-        </head>
-        <body>
-            <p>Redirecting to <a href='{BASE_URL}'>{BASE_URL}</a></p>
-        </body>
-        </html>
-        """)
-    urls.append(page_url)
+def save_page(title, summary, slug): date = datetime.utcnow().strftime("%Y-%m-%d") html = TEMPLATE.format(title=title, summary=summary, slug=slug, date=date, ads=ADS_BLOCK) path = os.path.join(NEWS_DIR, f"{slug}.html") with open(path, "w", encoding="utf-8") as f: f.write(html)
 
-    # Add to RSS items
-    rss_items.append(f"""
-    <item>
-        <title>{topic.title()} in {location.title()}</title>
-        <link>{page_url}</link>
-        <description>Latest update on {topic} in {location}</description>
-        <pubDate>{datetime.utcnow().strftime('%a, %d %b %Y %H:%M:%S +0000')}</pubDate>
-    </item>
-    """)
-
-print("Generating RSS feeds...")
-rss_chunks = [rss_items[i:i+50000] for i in range(0, len(rss_items), 50000)]
-for i, chunk in enumerate(rss_chunks, start=1):
-    with open(RSS_DIR / f"rss{i}.xml", "w", encoding="utf-8") as f:
-        f.write("""<?xml version="1.0"?>
-<rss version="2.0">
-<channel>
-<title>RespireWork RSS Feed</title>
-<link>https://www.respirework.com</link>
-<description>Massive updates on worldwide trending topics.</description>
-        """)
-        f.writelines(chunk)
-        f.write("""
-</channel>
-</rss>
-        """)
-
-print("Generating sitemap files...")
-sitemap_chunks = [urls[i:i+MAX_URLS_PER_SITEMAP] for i in range(0, len(urls), MAX_URLS_PER_SITEMAP)]
-sitemap_urls = []
-for i, chunk in enumerate(sitemap_chunks, start=1):
-    sitemap_file = SITEMAP_DIR / f"sitemap{i}.xml"
-    sitemap_url = f"{BASE_URL}/sitemaps/sitemap{i}.xml"
-    sitemap_urls.append(sitemap_url)
-
-    with open(sitemap_file, "w", encoding="utf-8") as f:
-        f.write("""<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-        """)
-        for url in chunk:
-            f.write(f"""
-  <url>
-    <loc>{url}</loc>
-    <lastmod>{datetime.utcnow().date()}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-            """)
-        f.write("</urlset>")
-
-# Create sitemap index file
-with open(SITEMAP_DIR / "sitemap_index.xml", "w", encoding="utf-8") as f:
-    f.write("""<?xml version="1.0" encoding="UTF-8"?>
-<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    """)
-    for sitemap_url in sitemap_urls:
-        f.write(f"""
-  <sitemap>
-    <loc>{sitemap_url}</loc>
-    <lastmod>{datetime.utcnow().date()}</lastmod>
-  </sitemap>
-        """)
-    f.write("</sitemapindex>")
-
-print(f"✅ Generated {len(urls)} pages, {len(sitemap_chunks)} sitemap files, and {len(rss_chunks)} RSS files.")
+if name == "main": os.makedirs(NEWS_DIR, exist_ok=True) topics = fetch_trending_topics() for title, summary, slug in topics: save_page(title, summary, slug) print(f"Generated {len(topics)} AMP news pages.")
