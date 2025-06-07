@@ -26,12 +26,15 @@ jobs:
       - name: 📰 Generate AMP Pages, RSS, Sitemap
         run: python scripts/pages-build-deployment.py
 
+      - name: 🕒 Update timestamp file to force commit
+        run: echo "Last updated: $(date -u)" > last-updated.txt
+
       - name: ✅ Commit & Push changes
         run: |
           git config --global user.email "bot@respirework.com"
           git config --global user.name "RespireBot"
           git add .
-          git commit -m "🤖 Auto-update AMP pages, RSS, and Sitemap"
+          git diff --quiet && git diff --staged --quiet || git commit -m "🤖 Auto-update AMP pages, RSS, Sitemap"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
