@@ -1,6 +1,6 @@
 name: Generate News + RSS + Sitemap
 
-on: push: branches: - main schedule: - cron: '0 * * * *' # every hour
+on: push: branches: - main schedule: - cron: '0 * * * *' # every minute
 
 jobs: build: runs-on: ubuntu-latest steps: - name: 🔄 Checkout code uses: actions/checkout@v3
 
