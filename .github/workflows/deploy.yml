@@ -24,7 +24,7 @@ jobs:
         run: pip install requests
 
       - name: ✨ Run Deployment Script
-        run: python pages-build-deployment.py
+        run: python script/pages-build-deployment.py
 
       - name: ☁️ Ping Google and Bing
         run: |
