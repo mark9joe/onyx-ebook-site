@@ -29,15 +29,21 @@ jobs:
       - name: 🕒 Update timestamp file to force commit
         run: echo "Last updated: $(date -u)" > last-updated.txt
 
-      - name: ✅ Commit & Push changes
-        run: |
-          git config --global user.email "bot@respirework.com"
-          git config --global user.name "RespireBot"
-          git add .
-          git diff --quiet && git diff --staged --quiet || git commit -m "🤖 Auto-update AMP pages, RSS, Sitemap"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: ✅ Commit & Push changes (only if changed)
+  run: |
+    git config --global user.email "bot@respirework.com"
+    git config --global user.name "RespireBot"
+    git add .
+
+    # Only commit if changes exist
+    if ! git diff --cached --quiet; then
+      git commit -m "🤖 Auto-update AMP pages, RSS, Sitemap"
+      git push
+    else
+      echo "No changes to commit."
+    fi
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: ☁️ Ping Google and Bing
         run: |
