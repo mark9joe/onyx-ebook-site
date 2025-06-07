@@ -1,11 +1,43 @@
-name: Deploy
-on: [push]
+name: Generate News + RSS + Sitemap
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 * * * *' # every hour
+
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
-      - uses: peaceiris/actions-gh-pages@v3
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v3
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs
+          python-version: 3.11
+
+      - name: 📦 Install dependencies
+        run: pip install requests
+
+      - name: 📰 Generate AMP Pages
+        run: python scripts/generate_pages.py
+
+      - name: 📡 Build RSS Feed
+        run: python scripts/build_rss.py
+
+      - name: 🗺️ Build Sitemap
+        run: python scripts/build_sitemap.py
+
+      - name: ✅ Commit & Push changes
+        run: |
+          git config --global user.email "bot@respirework.com"
+          git config --global user.name "RespireBot"
+          git add .
+          git commit -m "🤖 Auto-update news, rss, and sitemap"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
