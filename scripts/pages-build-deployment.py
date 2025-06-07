@@ -1,64 +1,100 @@
-name: Generate News + RSS + Sitemap + Deploy
+import os
+import requests
+from datetime import datetime
+from xml.etree.ElementTree import Element, SubElement, tostring
+import xml.dom.minidom
 
-on:
-  push:
-    branches:
-      - main
-  schedule:
-    - cron: '0 * * * *'  # Runs every minute
+NEWS_DIR = "news"
+BASE_URL = "https://respirework.com/news"
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+# Replace with your ad code
+AD_CODE = """<script>
+(function(wgg){
+var d = document,
+    s = d.createElement('script'),
+    l = d.scripts[d.scripts.length - 1];
+s.settings = wgg || {};
+s.src = "//complete-drink.com/bgXEV/sXd.GAl/0tY/W/cW/ueomD9fuzZuU-lzkfPfT/Yo0vMGDgAexkO/DKIethNbj-QawTMADPED4WMmwo";
+s.async = true;
+s.referrerPolicy = 'no-referrer-when-downgrade';
+l.parentNode.insertBefore(s, l);
+})({})
+</script>"""
 
-    steps:
-      - name: 🔄 Checkout code
-        uses: actions/checkout@v3
+TEMPLATE = """<!doctype html>
+<html ⚡>
+<head>
+  <meta charset="utf-8">
+  <title>{title}</title>
+  <link rel="canonical" href="{url}">
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+  <style amp-boilerplate>body{{visibility:hidden}}</style>
+  <script async src="https://cdn.ampproject.org/v0.js"></script>
+</head>
+<body>
+  <h1>{title}</h1>
+  <p><em>{date}</em></p>
+  <p>{summary}</p>
+  {ad_code}
+</body>
+</html>"""
 
-      - name: 🐍 Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.11
+def fetch_trending():
+    url = "https://trends.google.com/trends/trendingsearches/daily/rss?geo=US"
+    r = requests.get(url)
+    topics = []
+    if r.ok:
+        import xml.etree.ElementTree as ET
+        root = ET.fromstring(r.content)
+        for item in root.findall(".//item"):
+            title = item.findtext("title")
+            summary = item.findtext("description")
+            slug = "-".join(title.lower().split())
+            topics.append((title, summary, slug))
+    return topics[:50]
 
-      - name: 📦 Install dependencies
-        run: pip install requests
+def generate_pages(topics):
+    os.makedirs(NEWS_DIR, exist_ok=True)
+    for title, summary, slug in topics:
+        date = datetime.utcnow().strftime("%Y-%m-%d")
+        url = f"{BASE_URL}/{slug}.html"
+        html = TEMPLATE.format(title=title, summary=summary, slug=slug, date=date, ad_code=AD_CODE, url=url)
+        with open(os.path.join(NEWS_DIR, f"{slug}.html"), "w", encoding="utf-8") as f:
+            f.write(html)
 
-      - name: 📰 Generate AMP News, RSS, and Sitemap
-        run: python scripts/pages-build-deployment.py
+def generate_rss(topics):
+    rss = Element("rss", version="2.0")
+    channel = SubElement(rss, "channel")
+    SubElement(channel, "title").text = "RespireWork News Feed"
+    SubElement(channel, "link").text = BASE_URL
+    SubElement(channel, "description").text = "Daily trending AMP news."
 
-      - name: ☁️ Ping Google & Bing with sitemap
-        run: |
-          curl https://www.google.com/ping?sitemap=https://respirework.com/sitemap.xml
-          curl https://www.bing.com/ping?sitemap=https://respirework.com/sitemap.xml
+    for title, summary, slug in topics:
+        item = SubElement(channel, "item")
+        SubElement(item, "title").text = title
+        SubElement(item, "description").text = summary
+        SubElement(item, "link").text = f"{BASE_URL}/{slug}.html"
 
-      - name: ✅ Commit & Push changes
-        run: |
-          git config --global user.email "bot@respirework.com"
-          git config --global user.name "RespireBot"
-          git add .
-          git commit -m "🤖 Auto-update AMP news, RSS, and sitemap" --allow-empty
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    xml_str = xml.dom.minidom.parseString(tostring(rss)).toprettyxml()
+    with open("rss.xml", "w", encoding="utf-8") as f:
+        f.write(xml_str)
 
-      - name: 🚀 Trigger Vercel Deployment
-        run: |
-          curl -X POST "https://api.vercel.com/v1/integrations/deploy/prj_YourProjectID/token=YourToken"
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+def generate_sitemap(topics):
+    urlset = Element("urlset", xmlns="http://www.sitemaps.org/schemas/sitemap/0.9")
+    for _, _, slug in topics:
+        url = SubElement(urlset, "url")
+        SubElement(url, "loc").text = f"{BASE_URL}/{slug}.html"
+        SubElement(url, "lastmod").text = datetime.utcnow().strftime("%Y-%m-%d")
 
-      - name: 📣 Notify via Slack
-        uses: slackapi/slack-github-action@v1.23.0
-        with:
-          payload: |
-            {
-              "text": "✅ RespireWork: AMP pages, RSS, and sitemap deployed."
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    xml_str = xml.dom.minidom.parseString(tostring(urlset)).toprettyxml()
+    with open("sitemap.xml", "w", encoding="utf-8") as f:
+        f.write(xml_str)
 
-      - name: 📲 Notify via Telegram
-        run: |
-          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
-          -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-          -d text="✅ RespireWork: AMP news, RSS feed, and sitemap are live!"
+if __name__ == "__main__":
+    print("📥 Fetching trending topics...")
+    topics = fetch_trending()
+    print(f"✅ {len(topics)} topics found.")
+    generate_pages(topics)
+    generate_rss(topics)
+    generate_sitemap(topics)
+    print("🚀 News, RSS, and Sitemap generated.")
