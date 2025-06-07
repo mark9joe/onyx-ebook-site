@@ -28,18 +28,19 @@ steps:
   - name: 🕒 Touch file to force commit
     run: echo "Updated at $(date -u)" > last-updated.txt
 
-  - name: ✅ Commit & Push if changed
-    run: |
-      git config --global user.email "bot@respirework.com"
-      git config --global user.name "RespireBot"
-      git add .
-      if ! git diff --cached --quiet; then
-        git commit -m "🤖 Auto-update AMP pages, RSS, Sitemap"
-        git push
-      else
-        echo "No changes to commit."
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+ - name: ✅ Commit & Push if changed
+  run: |
+    git config --global user.email "bot@respirework.com"
+    git config --global user.name "RespireBot"
+    git add .
+    if ! git diff --cached --quiet; then
+      git commit -m "🤖 Auto-update AMP pages, RSS, Sitemap"
+      git push
+    else
+      echo "✅ No changes to commit."
+      exit 0
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   - name: ☁️ Ping Google and Bing
     run: |
