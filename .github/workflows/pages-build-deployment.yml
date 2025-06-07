@@ -43,4 +43,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/workflows/deploy.yml
+        uses: pages-build-deployment.py
