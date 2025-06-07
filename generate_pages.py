@@ -1,7 +1,3 @@
-File: scripts/generate_pages.py
-
-Purpose: Generate AMP news pages based on trending topics
-
 import os import requests from datetime import datetime
 
 NEWS_DIR = "news" TOPIC_SOURCE = "https://trends.google.com/trends/trendingsearches/daily/rss?geo=US" TEMPLATE = '''<!doctype html>
