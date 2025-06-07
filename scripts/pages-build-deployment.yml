@@ -1,0 +1,64 @@
+name: Generate News + RSS + Sitemap + Deploy
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 * * * *'  # Runs every minute
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v3
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: 📦 Install dependencies
+        run: pip install requests
+
+      - name: 📰 Generate AMP News, RSS, and Sitemap
+        run: python scripts/pages-build-deployment.py
+
+      - name: ☁️ Ping Google & Bing with sitemap
+        run: |
+          curl https://www.google.com/ping?sitemap=https://respirework.com/sitemap.xml
+          curl https://www.bing.com/ping?sitemap=https://respirework.com/sitemap.xml
+
+      - name: ✅ Commit & Push changes
+        run: |
+          git config --global user.email "bot@respirework.com"
+          git config --global user.name "RespireBot"
+          git add .
+          git commit -m "🤖 Auto-update AMP news, RSS, and sitemap" --allow-empty
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🚀 Trigger Vercel Deployment
+        run: |
+          curl -X POST "https://api.vercel.com/v1/integrations/deploy/prj_YourProjectID/token=YourToken"
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+      - name: 📣 Notify via Slack
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          payload: |
+            {
+              "text": "✅ RespireWork: AMP pages, RSS, and sitemap deployed."
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: 📲 Notify via Telegram
+        run: |
+          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
+          -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+          -d text="✅ RespireWork: AMP news, RSS feed, and sitemap are live!"
