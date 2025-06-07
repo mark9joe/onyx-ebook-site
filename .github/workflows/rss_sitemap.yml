@@ -23,6 +23,6 @@ jobs:
 
       - name: Run Generator
         run: |
-          python generate_pages.py
+          python Generate News + RSS + Sitemap.py
           curl -s "http://www.google.com/ping?sitemap=https://plazead.replit.app/sitemap.xml" || echo "Google ping deprecated"
           curl -s "https://www.bing.com/ping?sitemap=https://plazead.replit.app/sitemap.xml"
