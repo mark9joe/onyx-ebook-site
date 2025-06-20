@@ -13,4 +13,3 @@ krushmedia.com, AJxF6R572a9M6CaTvK, RESELLER
 motorik.io, 100463, RESELLER
 smaato.com, 1100056344, RESELLER, 07bcf65f187117b4
 smartadserver.com, 4926, RESELLER, 060d053dcf45cbf3
-732cada63d2eabb6085dc4a5ef89d169
