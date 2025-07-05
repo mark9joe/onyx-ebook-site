@@ -1,8 +1,15 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0">
-	<channel>
-		<title>RespireWork News Feed</title>
-		<link>https://respirework.com/news</link>
-		<description>Daily trending AMP news.</description>
-	</channel>
+<channel>
+  <title>Respirework Feed</title>
+  <link>https://www.respirework.com</link>
+  <description>Main website feed</description>
+  <item>
+    <title>New Chapter Released: Storm of Shadows</title>
+    <link>https://www.respirework.com/empyrean</link>
+    <description>The latest release from the Empyrean series is now available.</description>
+    <pubDate>Sat, 05 Jul 2025 07:21:42 GMT</pubDate>
+    <guid isPermaLink="false">empyrean-1751700102</guid>
+  </item>
+</channel>
 </rss>
